@@ -8,7 +8,7 @@ interface WeatherData {
 
 export default function Home() {
     const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [notices, setNotices] = useState<string[]>(['서버 점검 예정', '새로운 업데이트 소식']);
+    const [notices, _] = useState<string[]>(['서버 점검 예정', '새로운 업데이트 소식']);
 
     useEffect(() => {
         // 가상의 날씨 데이터 (실제 API 연동 시 fetch 사용)

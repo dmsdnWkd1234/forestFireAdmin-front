@@ -8,7 +8,7 @@ interface ReportItem {
 }
 
 export default function Report() {
-    const [reports, setReports] = useState<ReportItem[]>([
+    const [reports, _] = useState<ReportItem[]>([
         { id: 1, content: '가까운 산에 산불 발생', date: '2025-03-29', name: '김은호' },
         { id: 2, content: '먼 산에 산불 발생', date: '2025-03-28', name: '김은후' },
     ]);
