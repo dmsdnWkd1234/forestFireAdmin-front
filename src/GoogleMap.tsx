@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
-import defalutBat from './assets/defaultImg.png';
 import bat100 from './assets/bat100.svg';
 import halfBat from './assets/halfBat.svg';
 import nobat from './assets/noBat.svg';
 
 const containerStyle = {
-    width: '500px',
-    height: '300px',
+    width: '1300px',
+    height: '522px',
+    marginTop: '15px',
 };
 
 const center = {
