@@ -1,17 +1,8 @@
-import { useState } from 'react';
-
-interface ReportItem {
-    id: number;
-    content: string;
-    date: string;
-    name: string;
-}
-
 export default function Report() {
-    const [reports, _] = useState<ReportItem[]>([
+    const reports = [
         { id: 1, content: '가까운 산에 산불 발생', date: '2025-03-29', name: '김은호' },
         { id: 2, content: '먼 산에 산불 발생', date: '2025-03-28', name: '김은후' },
-    ]);
+    ];
 
     return (
         <div>
