@@ -3,7 +3,8 @@ import * as S from './style/main/style';
 import Report from './Report.tsx';
 import GoogleMapComponent from './GoogleMap.tsx';
 import Home from './Home.tsx';
-import Notice from './Notice.tsx';
+import Notice from './notice/Notice.tsx';
+import CreateNotice from './notice/CreateNotice.tsx';
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/map" element={<GoogleMapComponent />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/Notice" element={<Notice />} />
+                <Route path="/CreateNotice" element={<CreateNotice />} />
             </Routes>
         </Router>
     );
