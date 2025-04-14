@@ -1,27 +1,27 @@
 name: CD
 
 on:
-  push:
-    branches: [develop]
+    push:
+        branches: [develop]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      -name: Checkout code
-      uses: actions/checkout@v3
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      -name: Deploy to EC2
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-      host: ${{secre.EC2_HOST}}
-      username: ${{secrets.EC2_USER}}
-      key: ${{secrets.EC2_KEY}}
-      script: |
-        cd forestFireAdmin-front
-        git pull origin develop
-        sudo docker stop my-react-app || true
-        sudo docker rm my-react-app || true
-        sudo docker build -t my-react-app .
-        sudo docker run -d -p 3000:3000 --name my-react-app my-react-app
+            - name: Deploy to EC2
+              uses: appleboy/ssh-action@v0.1.10
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_KEY }}
+                  script: |
+                      cd forestFireAdmin-front
+                      git pull origin develop
+                      sudo docker stop my-react-app || true
+                      sudo docker rm my-react-app || true
+                      sudo docker build -t my-react-app .
+                      sudo docker run -d -p 3000:3000 --name my-react-app my-react-app
