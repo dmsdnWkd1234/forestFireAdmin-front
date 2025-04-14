@@ -22,7 +22,7 @@ export default function CreateNotice() {
 
     return (
         <>
-            <button onClick={deleteNotice}></button>
+            <button onClick={deleteNotice}>삭제버튼</button>
         </>
     );
 }
