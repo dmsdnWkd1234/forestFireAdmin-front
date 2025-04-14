@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
 export default function CreateNotice() {
-    const [id, setId] = useState('');
+    const [id, setId] = useState(0);
+
+    setId(1);
 
     const deleteNotice = () => {
         fetch('https://forestfireadmin-back.onrender.com/deleteNotice', {
