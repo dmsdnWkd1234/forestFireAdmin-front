@@ -23,6 +23,7 @@ export default function NoticeBoard() {
     return (
         <div>
             <S.root>
+                안녕하세요
                 <S.addNoticeButton>
                     <S.createNoticeLink href="/createNotice">공지 작성</S.createNoticeLink>
                 </S.addNoticeButton>
