@@ -7,7 +7,7 @@ export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated:
         id: 0,
         title: '',
         content: '',
-        type: '',
+        type: '공지',
     });
 
     useEffect(() => {
@@ -63,7 +63,9 @@ export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated:
             <textarea name="title" value={notice.title} onChange={handleChange} readOnly={!updateState} />
             <textarea name="content" value={notice.content} onChange={handleChange} readOnly={!updateState} />
             <select name="type" value={notice.type} onChange={handleChange} disabled={!updateState}>
-                <option value="공지">공지</option>
+                <option value="공지" selected>
+                    공지
+                </option>
                 <option value="긴급">긴급</option>
                 <option value="대피">대피</option>
             </select>

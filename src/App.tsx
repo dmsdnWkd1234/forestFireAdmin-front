@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import * as S from './style/main/style';
-import Report from './Report.tsx';
-import GoogleMapComponent from './GoogleMap.tsx';
+import Report from './reports/Report.tsx';
+import GoogleMapComponent from './map/GoogleMap.tsx';
 import Home from './Home.tsx';
 import Notice from './notice/Notice.tsx';
 import CreateNotice from './notice/CreateNotice.tsx';
