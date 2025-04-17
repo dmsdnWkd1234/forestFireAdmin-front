@@ -12,6 +12,13 @@ export const createNoticeRootBox = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    width: 50vw;
-    height: 30vh;
 `;
+
+export const titleCategoryBox = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 10%;
+`;
+
+export const titleTextAreaBox = styled.div``;

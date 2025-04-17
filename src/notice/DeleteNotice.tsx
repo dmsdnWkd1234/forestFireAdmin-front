@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function CreateNotice() {
+export default function DeleteNotice({ no }: { no: number }) {
     const [id, setId] = useState(0);
 
-    setId(1);
+    useEffect(() => {
+        settingId();
+    }, [no]);
+
+    const settingId = () => {
+        setId(no);
+    };
 
     const deleteNotice = () => {
         fetch('https://forestfireadmin-back.onrender.com/deleteNotice', {
@@ -22,7 +28,7 @@ export default function CreateNotice() {
 
     return (
         <>
-            <button onClick={deleteNotice}>삭제버튼</button>
+            <button onClick={deleteNotice}>삭제</button>
         </>
     );
 }

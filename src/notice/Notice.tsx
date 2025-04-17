@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
 import * as S from '../style/notice/notice';
-
-interface Notice {
-    id: number;
-    title: string;
-    content: string;
-    type: string;
-    created_at: string;
-    updated_at: string;
-}
+import Modal from './Modal';
+import CreateNotice from './CreateNotice';
+import ReadNotice from './ReadNotice';
+import { Notice } from '../types/notice';
 
 export default function NoticeBoard() {
     const [notices, setNotices] = useState<Notice[]>([]);
+    const [noticeId, setNoticeId] = useState(0);
+    const [isContentModalOpen, setIsContentModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         fetch('https://forestfireadmin-back.onrender.com/notice')
@@ -23,10 +21,15 @@ export default function NoticeBoard() {
     return (
         <div>
             <S.root>
-                안녕하세요
                 <S.addNoticeButton>
-                    <S.createNoticeLink href="/createNotice">공지 작성</S.createNoticeLink>
+                    <S.createNoticeLink onClick={() => setIsModalOpen(true)}>공지 작성</S.createNoticeLink>
                 </S.addNoticeButton>
+                <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                    <CreateNotice />
+                </Modal>
+                <Modal isOpen={isContentModalOpen} onClose={() => setIsContentModalOpen(false)}>
+                    <ReadNotice id={noticeId} />
+                </Modal>
                 {notices.length === 0 ? (
                     <p>등록된 공지가 없습니다.</p>
                 ) : (
@@ -39,16 +42,24 @@ export default function NoticeBoard() {
                             <S.listDate weight={true}>시간</S.listDate>
                         </S.listHeaderBox>
                         {notices.map((notice) => (
-                            <S.listRootBox key={notice.id}>
-                                <S.listId>{notice.id}</S.listId>
-                                <S.listType>{notice.type}</S.listType>
-                                <S.listTitle>{notice.title}</S.listTitle>
-                                <S.listDate>
-                                    {notice.created_at
-                                        ? new Date(notice.created_at).toISOString().slice(0, 19).replace('T', ' ')
-                                        : '날짜 없음'}
-                                </S.listDate>
-                            </S.listRootBox>
+                            <>
+                                <S.listRootBox
+                                    key={notice.id}
+                                    onClick={() => {
+                                        setIsContentModalOpen(true);
+                                        setNoticeId(notice.id);
+                                    }}
+                                >
+                                    <S.listId>{notice.id}</S.listId>
+                                    <S.listType>{notice.type}</S.listType>
+                                    <S.listTitle>{notice.title}</S.listTitle>
+                                    <S.listDate>
+                                        {notice.created_at
+                                            ? new Date(notice.created_at).toISOString().slice(0, 19).replace('T', ' ')
+                                            : '날짜 없음'}
+                                    </S.listDate>
+                                </S.listRootBox>
+                            </>
                         ))}
                     </S.showNoticeListRootBox>
                 )}

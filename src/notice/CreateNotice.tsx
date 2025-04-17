@@ -48,13 +48,19 @@ export default function CreateNotice() {
         <S.root>
             <S.createNoticeRootBox>
                 <h1>공지 작성하기</h1>
-                <textarea placeholder="제목 입력" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
-                <>카테고리선택</>
-                <select onChange={selectType}>
-                    <option>긴급</option>
-                    <option>공지</option>
-                    <option>대피</option>
-                </select>
+                <S.titleCategoryBox>
+                    <textarea
+                        placeholder="제목 입력"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    ></textarea>
+                    <select onChange={selectType}>
+                        <option>긴급</option>
+                        <option>공지</option>
+                        <option>대피</option>
+                    </select>
+                </S.titleCategoryBox>
+
                 <textarea
                     placeholder="내용 입력"
                     value={content}
