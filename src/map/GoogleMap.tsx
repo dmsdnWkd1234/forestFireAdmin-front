@@ -6,7 +6,7 @@ import nobat from '../assets/battery/noBat.svg';
 import MeshDataSelector from './MeshDataSelector';
 
 const containerStyle = {
-    width: '1300px',
+    width: '1600px',
     height: '522px',
     marginTop: '15px',
 };
@@ -64,7 +64,6 @@ const GoogleMapComponent: React.FC = () => {
                         >
                             <div>
                                 <h3>name : {selectedMesh.name}</h3>
-                                <h3>temp : {selectedMesh.temp}</h3>
                                 <h3>battery : {selectedMesh.battery}</h3>
                             </div>
                         </InfoWindow>

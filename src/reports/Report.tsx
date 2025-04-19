@@ -1,4 +1,6 @@
+'use client';
 import { useEffect, useState } from 'react';
+import * as S from '../style/report/style';
 import type { Report } from '../types/report';
 
 export default function Report() {
@@ -10,26 +12,32 @@ export default function Report() {
             .then((data) => setReports(data))
             .catch((err) => console.error('공지 불러오기 실패:', err));
     }, []);
+
     return (
-        <div>
-            <h2>신고 내역</h2>
+        <S.Container>
+            <S.Title>신고 내역</S.Title>
             {reports.length === 0 ? (
-                <p>신고 내역이 없습니다.</p>
+                <S.EmptyMessage>신고 내역이 없습니다.</S.EmptyMessage>
             ) : (
-                <ul>
+                <S.List>
                     {reports.map((report) => (
-                        <li key={report.id}>
-                            <strong>신고 번호:{report.id}</strong>
-                            <br></br>
-                            <strong>메쉬 번호:{report.mesh_id}</strong>
-                            <br></br>
-                            <strong>신고 유형:{report.type}</strong>
-                            <br></br>
-                            일시:{report.created_at}
-                        </li>
+                        <S.ListItem key={report.id}>
+                            <S.Field>
+                                <strong>신고 번호:</strong> {report.id}
+                            </S.Field>
+                            <S.Field>
+                                <strong>메쉬 번호:</strong> {report.mesh_id}
+                            </S.Field>
+                            <S.Field>
+                                <strong>신고 유형:</strong> {report.type}
+                            </S.Field>
+                            <S.Field>
+                                <strong>일시:</strong> {report.created_at}
+                            </S.Field>
+                        </S.ListItem>
                     ))}
-                </ul>
+                </S.List>
             )}
-        </div>
+        </S.Container>
     );
 }
