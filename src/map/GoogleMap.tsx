@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
-import bat100 from '../assets/bat100.svg';
-import halfBat from '../assets/halfBat.svg';
-import nobat from '../assets/noBat.svg';
+import bat100 from '../assets/battery/bat100.svg';
+import halfBat from '../assets/battery/halfBat.svg';
+import nobat from '../assets/battery/noBat.svg';
 import MeshDataSelector from './MeshDataSelector';
 
 const containerStyle = {
