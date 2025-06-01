@@ -21,7 +21,7 @@ export default function CreateNotice() {
     };
 
     const createNotice = () => {
-        fetch('https://forestfireadmin-back.onrender.com/createNotice', {
+        fetch(`${import.meta.env.VITE_BACK_URL}createNotice`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 
-export const Root = styled.div`
+export const Root = styled.div<{ active: string }>`
     display: flex;
     gap: 12px;
     padding: 10px 20px;
     background-color: #f8f9fa;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ active }) =>
+        active == '전체'
+            ? '0 4px 12px rgba(0, 0, 0, 0.15)' // 클릭된 것처럼 좀 더 강한 그림자
+            : '0 2px 8px rgba(0, 0, 0, 0.05)'};
     width: fit-content;
     margin: 20px auto 0;
 `;
