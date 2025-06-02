@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
+    max-width: 30vw;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `;
 
 export const Title = styled.h2`
-    text-align: center;
     margin-bottom: 30px;
     color: #333;
 `;

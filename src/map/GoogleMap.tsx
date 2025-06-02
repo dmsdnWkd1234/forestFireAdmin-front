@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
 import bat100 from '../assets/battery/bat100.svg';
 import halfBat from '../assets/battery/halfBat.svg';
@@ -18,14 +18,11 @@ const center = {
     lng: 127.05501,
 };
 
-const batteryStatus = (battery: number) => {
-    if (battery >= 80) {
-        return bat100;
-    } else if (battery < 80 && battery >= 20) {
-        return halfBat;
-    } else {
-        return nobat;
-    }
+const batteryStatus = (battery?: number): string => {
+    if (typeof battery !== 'number') return nobat;
+    if (battery >= 80) return bat100;
+    if (battery >= 20) return halfBat;
+    return nobat;
 };
 
 const meshAdress = meshAdressArray;
@@ -41,6 +38,14 @@ const GoogleMapComponent: React.FC = () => {
 
     const { meshData, error } = useMeshPolling(selectedMesh?.unicast_address ?? null);
 
+    const [batteryIcon, setBatteryIcon] = useState(nobat);
+
+    useEffect(() => {
+        if (typeof meshData?.Battery_Persent === 'number') {
+            setBatteryIcon(batteryStatus(meshData.Battery_Persent));
+        }
+    }, [meshData?.Battery_Persent]);
+
     return (
         <>
             <MeshDataSelector></MeshDataSelector>
@@ -50,7 +55,7 @@ const GoogleMapComponent: React.FC = () => {
                         <Marker
                             key={mesh.lat}
                             position={{ lat: mesh.lat, lng: mesh.lng }}
-                            icon={{ url: batteryStatus(mesh.battery) }}
+                            icon={{ url: batteryIcon }}
                             onClick={() => setSelectedMesh(mesh)} // 클릭 시 InfoWindow 표시
                         />
                     ))}

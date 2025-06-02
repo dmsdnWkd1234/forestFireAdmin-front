@@ -3,20 +3,25 @@ import { MeshData } from '../types/mesh';
 
 const useMeshPolling = (unicast_adress: number | null, interval = 30000) => {
     const [meshData, setMeshData] = useState<MeshData | null>(null);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         let isMounted = true;
 
         const fetchMesh = async () => {
             try {
-                const res = await fetch(`http://localhost:3002/mesh/${unicast_adress}`);
+                const res = await fetch(`${import.meta.env.VITE_BACK_URL}mesh/${unicast_adress}`);
                 if (!res.ok) throw new Error('서버 응답 실패');
                 const data = await res.json();
                 if (isMounted) setMeshData(data[0]);
             } catch (err) {
-                if (isMounted) setError(err.message);
-                console.error('🔥 메쉬 불러오기 실패:', err);
+                if (err instanceof Error) {
+                    if (isMounted) setError(err.message);
+                    console.error('🔥 메쉬 불러오기 실패:', err);
+                } else {
+                    if (isMounted) setError('알 수 없는 오류 발생');
+                    console.error('🔥 메쉬 불러오기 실패 (unknown error):', err);
+                }
             }
         };
 
