@@ -8,7 +8,6 @@ interface TemperatureData {
 }
 
 export function useSeoulTemperature(): TemperatureData {
-    console.log('fetchTemperature 시작');
     const [temperature, setTemperature] = useState<string | null>(null);
     const [time, setTime] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
