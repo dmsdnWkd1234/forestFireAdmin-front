@@ -10,8 +10,6 @@ export default function CreateNotice() {
         setType(e.target.value);
     };
 
-    console.log(type);
-
     const errHandle = () => {
         if (!title) {
             alert('제목을 입력해주세요');

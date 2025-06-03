@@ -29,17 +29,17 @@ function App() {
                                 </Link>
                                 <Link to="/report">
                                     <S.menuBtnSection>
-                                        <S.menuBtn>신고접수</S.menuBtn>
+                                        <S.menuBtn>신고 목록 확인</S.menuBtn>
                                     </S.menuBtnSection>
                                 </Link>
                                 <Link to="/map">
                                     <S.menuBtnSection>
-                                        <S.menuBtn>지도</S.menuBtn>
+                                        <S.menuBtn>메쉬 정보 확인</S.menuBtn>
                                     </S.menuBtnSection>
                                 </Link>
                                 <Link to="/notice">
                                     <S.menuBtnSection>
-                                        <S.menuBtn>공지글</S.menuBtn>
+                                        <S.menuBtn>공지글 작성</S.menuBtn>
                                     </S.menuBtnSection>
                                 </Link>
                             </S.menuRootContainer>
