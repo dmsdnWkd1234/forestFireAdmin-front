@@ -16,7 +16,7 @@ export default function Home() {
                 <small>업데이트 시각: {time}</small>
             </section>
             <section>
-                <>test</>
+                <>test2</>
                 <Report></Report>
             </section>
         </div>
