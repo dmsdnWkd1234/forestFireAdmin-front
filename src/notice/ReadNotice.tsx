@@ -13,7 +13,7 @@ export default function ReadNotice({ id }: { id: number }) {
         updated_at: '',
     });
     const fetchData = () => {
-        fetch(`/${id}`)
+        fetch(`/api/notice/${id}`)
             .then((res) => res.json())
             .then((data) => setNotice(data))
             .catch((err) => console.error('공지 불러오기 실패:', err));

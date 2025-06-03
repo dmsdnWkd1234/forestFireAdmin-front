@@ -11,14 +11,14 @@ export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated:
     });
 
     useEffect(() => {
-        fetch(`/notice/${no}`)
+        fetch(`/api/notice/${no}`)
             .then((res) => res.json())
             .then((data) => setNotice(data))
             .catch((err) => console.error('공지 불러오기 실패:', err));
     }, [no, updateState]);
 
     const updateNotice = () => {
-        fetch('/updateNotice', {
+        fetch('/api/updateNotice', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

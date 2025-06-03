@@ -19,7 +19,7 @@ export default function CreateNotice() {
     };
 
     const createNotice = () => {
-        fetch(`/createNotice`, {
+        fetch(`/api/createNotice`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

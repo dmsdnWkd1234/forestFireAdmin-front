@@ -12,7 +12,7 @@ export default function NoticeBoard() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        fetch(`/notice`)
+        fetch(`/api/notice`)
             .then((res) => res.json())
             .then((data) => setNotices(data.reverse()))
             .catch((err) => console.error('공지 불러오기 실패:', err));
