@@ -19,7 +19,7 @@ jobs:
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_KEY }}
                   script: |
-                      cd forestFireAdmin-front
+                      cd my-react-app
 
                       echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" > .env
 
