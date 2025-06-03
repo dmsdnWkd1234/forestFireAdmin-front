@@ -4,6 +4,7 @@ import Modal from './Modal';
 import CreateNotice from './CreateNotice';
 import ReadNotice from './ReadNotice';
 import { Notice } from '../types/notice';
+import { dev_mode } from '../types/dev';
 
 export default function NoticeBoard() {
     const [notices, setNotices] = useState<Notice[]>([]);
@@ -12,7 +13,7 @@ export default function NoticeBoard() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        fetch(`/api/notice`)
+        fetch(`${dev_mode}api/notice` || `/api/notice`)
             .then((res) => res.json())
             .then((data) => setNotices(data.reverse()))
             .catch((err) => console.error('공지 불러오기 실패:', err));
