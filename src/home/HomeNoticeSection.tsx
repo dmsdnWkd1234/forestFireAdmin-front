@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { dev_mode } from '../types/dev';
+// import { dev_mode } from '../types/dev';
 import * as S from '../style/home/homeNoticeSection';
 import type { Notice } from '../types/notice';
 

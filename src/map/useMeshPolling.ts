@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MeshData } from '../types/mesh';
-import { dev_mode } from '../types/dev';
+// import { dev_mode } from '../types/dev';
 
 const useMeshPolling = (unicast_adress: number | null, interval = 30000) => {
     const [meshData, setMeshData] = useState<MeshData | null>(null);

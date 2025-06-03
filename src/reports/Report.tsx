@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import * as S from '../style/report/style';
 import type { Report } from '../types/report';
-import { dev_mode } from '../types/dev';
+// import { dev_mode } from '../types/dev';
 
 const ITEMS_PER_PAGE = 9;
 

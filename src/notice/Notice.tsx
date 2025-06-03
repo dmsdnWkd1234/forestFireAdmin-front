@@ -4,7 +4,7 @@ import Modal from './Modal';
 import CreateNotice from './CreateNotice';
 import ReadNotice from './ReadNotice';
 import { Notice } from '../types/notice';
-import { dev_mode } from '../types/dev';
+// import { dev_mode } from '../types/dev';
 
 export default function NoticeBoard() {
     const [notices, setNotices] = useState<Notice[]>([]);

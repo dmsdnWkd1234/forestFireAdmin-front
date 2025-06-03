@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import DeleteNotice from './DeleteNotice';
 import UpdateNotice from './UpdateNotice';
 import { Notice } from '../types/notice';
-import { dev_mode } from '../types/dev';
+// import { dev_mode } from '../types/dev';
 
 export default function ReadNotice({ id }: { id: number }) {
     const [notice, setNotice] = useState<Notice>({

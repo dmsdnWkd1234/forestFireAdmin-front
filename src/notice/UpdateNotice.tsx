@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { UpdateNotice } from '../types/notice';
-import { dev_mode } from '../types/dev';
+// import { dev_mode } from '../types/dev';
 
 export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated: () => void }) {
     const [updateState, setUpdateState] = useState(false);
