@@ -19,7 +19,7 @@ export default function CreateNotice() {
     };
 
     const createNotice = () => {
-        fetch(`${import.meta.env.VITE_BACK_URL}createNotice`, {
+        fetch(`/createNotice`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

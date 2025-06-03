@@ -10,7 +10,7 @@ const useMeshPolling = (unicast_adress: number | null, interval = 30000) => {
 
         const fetchMesh = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_BACK_URL}mesh/${unicast_adress}`);
+                const res = await fetch(`/mesh/${unicast_adress}`);
                 if (!res.ok) throw new Error('서버 응답 실패');
                 const data = await res.json();
                 if (isMounted) setMeshData(data[0]);
