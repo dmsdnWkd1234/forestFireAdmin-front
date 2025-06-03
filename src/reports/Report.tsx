@@ -7,7 +7,7 @@ export default function Report() {
     const [reports, setReports] = useState<Report[]>([]);
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_BACK_URL}api/report`)
+        fetch(`/api/report`)
             .then((res) => res.json())
             .then((data) => setReports(data))
             .catch((err) => console.error('공지 불러오기 실패:', err));
