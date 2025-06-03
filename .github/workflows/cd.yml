@@ -22,6 +22,9 @@ jobs:
                       cd my-react-app
 
                       echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" > .env
+                      echo "VITE_BACK_URL=${{ secrets.VITE_BACK_URL }}" >> .env
+                      echo "VITE_WEATHER_API_KEY=${{ secrets.VITE_WEATHER_API_KEY }}" >> .env
+                      echo "VITE_PASSKEY=${{ secrets.VITE_PASSKEY }}" >> .env
 
                       git pull origin develop
 
