@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import DeleteNotice from './DeleteNotice';
 import UpdateNotice from './UpdateNotice';
 import { Notice } from '../types/notice';
+import { dev_mode } from '../types/dev';
 
 export default function ReadNotice({ id }: { id: number }) {
     const [notice, setNotice] = useState<Notice>({
@@ -13,6 +14,7 @@ export default function ReadNotice({ id }: { id: number }) {
         updated_at: '',
     });
     const fetchData = () => {
+        // fetch(`${dev_mode}api/notice/${id}`)
         fetch(`/api/notice/${id}`)
             .then((res) => res.json())
             .then((data) => setNotice(data))

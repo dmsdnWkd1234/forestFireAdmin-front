@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MeshData } from '../types/mesh';
+import { dev_mode } from '../types/dev';
 
 const useMeshPolling = (unicast_adress: number | null, interval = 30000) => {
     const [meshData, setMeshData] = useState<MeshData | null>(null);
@@ -10,6 +11,7 @@ const useMeshPolling = (unicast_adress: number | null, interval = 30000) => {
 
         const fetchMesh = async () => {
             try {
+                // const res = await fetch(`${dev_mode}api/mesh/${unicast_adress}`);
                 const res = await fetch(`/api/mesh/${unicast_adress}`);
                 if (!res.ok) throw new Error('서버 응답 실패');
                 const data = await res.json();

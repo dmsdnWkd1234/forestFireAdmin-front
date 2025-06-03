@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const Root = styled.div<{ active: string }>`
+    width: 50vw;
+    height: 10vh;
     display: flex;
     gap: 12px;
     padding: 10px 20px;
@@ -11,7 +13,6 @@ export const Root = styled.div<{ active: string }>`
             ? '0 4px 12px rgba(0, 0, 0, 0.15)' // 클릭된 것처럼 좀 더 강한 그림자
             : '0 2px 8px rgba(0, 0, 0, 0.05)'};
     width: fit-content;
-    margin: 20px auto 0;
 `;
 
 export const MeshDataTile = styled.button`

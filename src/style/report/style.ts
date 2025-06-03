@@ -45,3 +45,33 @@ export const Field = styled.div`
         color: #222;
     }
 `;
+
+// style/report/style.ts
+
+export const GridList = styled.ul`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 0;
+`;
+
+export const Pagination = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    gap: 8px;
+`;
+
+export const PageButton = styled.button<{ active: boolean }>`
+    background-color: ${({ active }) => (active ? '#007bff' : '#eee')};
+    color: ${({ active }) => (active ? '#fff' : '#333')};
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: ${({ active }) => (active ? '#0056b3' : '#ddd')};
+    }
+`;

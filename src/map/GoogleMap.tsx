@@ -47,15 +47,14 @@ const GoogleMapComponent: React.FC = () => {
     }, [meshData?.Battery_Persent]);
 
     return (
-        <>
+        <div>
             <MeshDataSelector></MeshDataSelector>
             <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-                <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={13}>
+                <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
                     {meshAdress.map((mesh) => (
                         <Marker
                             key={mesh.lat}
                             position={{ lat: mesh.lat, lng: mesh.lng }}
-                            icon={{ url: batteryIcon }}
                             onClick={() => setSelectedMesh(mesh)} // 클릭 시 InfoWindow 표시
                         />
                     ))}
@@ -90,7 +89,7 @@ const GoogleMapComponent: React.FC = () => {
                     )}
                 </GoogleMap>
             </LoadScript>
-        </>
+        </div>
     );
 };
 

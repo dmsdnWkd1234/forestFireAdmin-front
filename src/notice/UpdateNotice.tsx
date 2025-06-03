@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { UpdateNotice } from '../types/notice';
+import { dev_mode } from '../types/dev';
 
 export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated: () => void }) {
     const [updateState, setUpdateState] = useState(false);
@@ -11,6 +12,7 @@ export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated:
     });
 
     useEffect(() => {
+        // fetch(`${dev_mode}/api/notice/${no}`)
         fetch(`/api/notice/${no}`)
             .then((res) => res.json())
             .then((data) => setNotice(data))

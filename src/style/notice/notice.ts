@@ -5,7 +5,7 @@ interface ListIdProps {
 }
 
 export const root = styled.div`
-    width: 100%;
+    width: 50vw;
 `;
 
 export const showNoticeListRootBox = styled.section`
