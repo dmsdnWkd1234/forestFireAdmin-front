@@ -6,7 +6,18 @@ export default function Home() {
     const { temperature, windDirection, windSpeed, weatherDescription, date, time, loading, error } = useSeoulWeather();
 
     if (loading) return <p>날씨 불러오는 중...</p>;
-    if (error) return <p>에러: {error}</p>;
+    if (error)
+        return (
+            <>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <>날씨 정보를 불러오는데 실패했습니다 잠시 후 다시 시도해주세요</>
+                    <HomeReportSection></HomeReportSection>
+                </div>
+                <>
+                    <HomeNoticeSection></HomeNoticeSection>
+                </>
+            </>
+        );
 
     return (
         <>

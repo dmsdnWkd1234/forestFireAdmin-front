@@ -4,7 +4,7 @@ import * as S from '../style/notice/createNotice';
 export default function CreateNotice() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState('긴급');
 
     const selectType = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setType(e.target.value);
