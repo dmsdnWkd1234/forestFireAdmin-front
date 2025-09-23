@@ -7,7 +7,7 @@ export default function HomeReporteSection() {
     const [reports, setReports] = useState<Report[]>([]);
 
     useEffect(() => {
-        fetch('/api/report')
+        fetch(`${import.meta.env.VITE_BACK_URL}api/report`)
             // fetch(dev_mode + 'api/report')
             .then((res) => res.json())
             .then((data) => setReports(data.reverse().slice(0, 3))) // 최신 3개만 표시

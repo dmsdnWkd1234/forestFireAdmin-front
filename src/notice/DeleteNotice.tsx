@@ -12,7 +12,7 @@ export default function DeleteNotice({ no }: { no: number }) {
     };
 
     const deleteNotice = () => {
-        fetch(`/api/deleteNotice`, {
+        fetch(`${import.meta.env.VITE_BACK_URL}api/deleteNotice`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ export default function HomeNoticeSection() {
     const [notices, setNotices] = useState<Notice[]>([]);
 
     useEffect(() => {
-        fetch(`/api/notice`)
+        fetch(`${import.meta.env.VITE_BACK_URL}api/notice`)
             // fetch(`${dev_mode}api/notice`)
             .then((res) => res.json())
             .then((data) => setNotices(data.reverse().slice(0, 3))) // 최신 3개만

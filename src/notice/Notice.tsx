@@ -14,7 +14,7 @@ export default function NoticeBoard() {
 
     useEffect(() => {
         // fetch(`${dev_mode}api/notice`)
-        fetch(`/api/notice`)
+        fetch(`${import.meta.env.VITE_BACK_URL}api/notice`)
             .then((res) => res.json())
             .then((data) => setNotices(data.reverse()))
             .catch((err) => console.error('공지 불러오기 실패:', err));

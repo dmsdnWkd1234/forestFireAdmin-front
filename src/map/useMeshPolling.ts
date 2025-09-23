@@ -11,8 +11,9 @@ const useMeshPolling = (unicast_adress: number | null, interval = 30000) => {
 
         const fetchMesh = async () => {
             try {
+                // 테스트용
                 // const res = await fetch(`${dev_mode}api/mesh/${unicast_adress}`);
-                const res = await fetch(`/api/mesh/${unicast_adress}`);
+                const res = await fetch(`${import.meta.env.VITE_BACK_URL}api/mesh/${unicast_adress}`);
                 if (!res.ok) throw new Error('서버 응답 실패');
                 const data = await res.json();
                 if (isMounted) setMeshData(data[0]);
