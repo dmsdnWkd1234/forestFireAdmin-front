@@ -8,7 +8,7 @@ import useMeshPolling from './useMeshPolling';
 import { meshAdressArray } from '../meshAdress';
 
 const containerStyle = {
-    width: '1600px',
+    width: '1000px',
     height: '522px',
     marginTop: '15px',
 };
@@ -17,13 +17,6 @@ const center = {
     lat: 37.632239,
     lng: 127.05501,
 };
-
-// const batteryStatus = (battery?: number): string => {
-//     if (typeof battery !== 'number') return nobat;
-//     if (battery >= 80) return bat100;
-//     if (battery >= 20) return halfBat;
-//     return nobat;
-// };
 
 const meshAdress = meshAdressArray;
 
