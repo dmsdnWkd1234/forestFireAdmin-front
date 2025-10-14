@@ -66,4 +66,18 @@ export const MenuIcon = styled.span`
 export const MenuText = styled.span`
     margin-left: 12px;
     font-size: 0.95rem;
+    display: flex;
+`;
+
+export const BetaIconContainer = styled.div`
+    width: 25px;
+    height: 13px;
+    border: 2px solid #a0a0a0;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0a0a0;
+    font-size: 0.7rem;
+    margin-left: 4px;
 `;

@@ -19,7 +19,7 @@ export default function FinalChartComponent() {
             setTimeout(() => {
                 console.log('데이터 로딩 완료!');
                 const apiResponse = {
-                    labels: ['1팀', '2팀', '3팀', '4팀', '5팀'],
+                    labels: ['1팀', '2팀', '3팀', '4팀', '5팀', '6팀'],
                     datasets: [
                         {
                             label: '분기별 실적',

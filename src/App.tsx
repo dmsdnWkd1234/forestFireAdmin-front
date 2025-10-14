@@ -24,7 +24,8 @@ function App() {
                                 <Route path="/map" element={<GoogleMapComponent />} />
                                 <Route path="/home" element={<Home />} />
                                 <Route path="/notice" element={<Notice />} />
-                                <Route path="dashboard" element={<Dashboard />} />
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/asktoai" element={<div>AI 분석 페이지 (개발 중)</div>} />
                                 <Route path="*" element={<Navigate to="/home" replace />} />
                             </Routes>
                         </main>

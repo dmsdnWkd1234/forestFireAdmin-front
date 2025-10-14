@@ -3,6 +3,8 @@ import { GoHome, GoGraph } from 'react-icons/go';
 import { LuSiren } from 'react-icons/lu';
 import { BsChatLeftText } from 'react-icons/bs';
 import { BiBroadcast } from 'react-icons/bi';
+import { RiRobot3Line } from 'react-icons/ri';
+import { FaFlask } from 'react-icons/fa';
 
 // const menuItems = [
 //     { path: '/home', icon: <GoHome />, name: '홈' },
@@ -48,6 +50,16 @@ function Sidebar() {
                 <S.MenuIcon>
                     <GoGraph />
                     <S.MenuText>대시보드</S.MenuText>
+                </S.MenuIcon>
+            </S.StyledNavLink>
+
+            <S.StyledNavLink to="/asktoai">
+                <S.MenuIcon>
+                    <RiRobot3Line />
+                    <S.MenuText>
+                        AI 분석
+                        <S.BetaIconContainer>beta</S.BetaIconContainer>
+                    </S.MenuText>
                 </S.MenuIcon>
             </S.StyledNavLink>
         </S.menuRootContainer>
