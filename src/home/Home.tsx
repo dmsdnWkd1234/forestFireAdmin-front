@@ -1,6 +1,7 @@
 import { useSeoulWeather } from '../useSeoulTemp';
 import HomeNoticeSection from './HomeNoticeSection';
 import HomeReportSection from './HomeReportSection';
+import * as SH from '../style/home/HomeContainer';
 import * as S from '../style/home/WeatherCard';
 import { FiSun, FiCompass, FiCalendar, FiClock } from 'react-icons/fi';
 
@@ -23,51 +24,58 @@ export default function Home() {
 
     return (
         <>
-            <S.GlassCard>
-                <S.CardTitle>현재 서울 날씨</S.CardTitle>
+            <SH.homeRoot>
+                <S.GlassCard>
+                    <S.CardTitle>현재 서울 날씨</S.CardTitle>
 
-                <S.MainInfoWrapper>
-                    <S.Temperature>{temperature}</S.Temperature>
-                    <S.WeatherIcon>
-                        <FiSun />
-                    </S.WeatherIcon>
-                </S.MainInfoWrapper>
+                    <S.MainInfoWrapper>
+                        <S.Temperature>{temperature}</S.Temperature>
+                        <S.WeatherIcon>
+                            <FiSun />
+                        </S.WeatherIcon>
+                    </S.MainInfoWrapper>
 
-                <S.DetailGrid>
-                    <S.DetailItem>
-                        <S.DetailLabel>
-                            <FiCompass /> 바람
-                        </S.DetailLabel>
-                        <S.DetailValue>
-                            {windDirection} {windSpeed}
-                        </S.DetailValue>
-                    </S.DetailItem>
+                    <S.DetailGrid>
+                        <S.DetailItem>
+                            <S.DetailLabel>
+                                <FiCompass /> 바람
+                            </S.DetailLabel>
+                            <S.DetailValue>
+                                {windDirection} {windSpeed}
+                            </S.DetailValue>
+                        </S.DetailItem>
 
-                    <S.DetailItem>
-                        <S.DetailLabel>
-                            <FiSun /> 날씨
-                        </S.DetailLabel>
-                        <S.DetailValue>{weatherDescription}</S.DetailValue>
-                    </S.DetailItem>
+                        <S.DetailItem>
+                            <S.DetailLabel>
+                                <FiSun /> 날씨
+                            </S.DetailLabel>
+                            <S.DetailValue>{weatherDescription}</S.DetailValue>
+                        </S.DetailItem>
 
-                    <S.DetailItem>
-                        <S.DetailLabel>
-                            <FiCalendar /> 예보 날짜
-                        </S.DetailLabel>
-                        <S.DetailValue>{date}</S.DetailValue>
-                    </S.DetailItem>
+                        <S.DetailItem>
+                            <S.DetailLabel>
+                                <FiCalendar /> 예보 날짜
+                            </S.DetailLabel>
+                            <S.DetailValue>{date}</S.DetailValue>
+                        </S.DetailItem>
 
-                    <S.DetailItem>
-                        <S.DetailLabel>
-                            <FiClock /> 예보 시간
-                        </S.DetailLabel>
-                        <S.DetailValue>{time}</S.DetailValue>
-                    </S.DetailItem>
-                </S.DetailGrid>
-            </S.GlassCard>
-            <>
-                <HomeNoticeSection></HomeNoticeSection>
-            </>
+                        <S.DetailItem>
+                            <S.DetailLabel>
+                                <FiClock /> 예보 시간
+                            </S.DetailLabel>
+                            <S.DetailValue>{time}</S.DetailValue>
+                        </S.DetailItem>
+                    </S.DetailGrid>
+                </S.GlassCard>
+                <SH.homeUnderRoot>
+                    <SH.Section margin="0 2% 0 0">
+                        <HomeNoticeSection />
+                    </SH.Section>
+                    <SH.Section margin="0 0 0 2%">
+                        <HomeReportSection />
+                    </SH.Section>
+                </SH.homeUnderRoot>
+            </SH.homeRoot>
         </>
     );
 }

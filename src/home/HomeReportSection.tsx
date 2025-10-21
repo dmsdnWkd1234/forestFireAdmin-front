@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // import { dev_mode } from '../types/dev';
-import * as S from '../style/home/homeReportSection';
+import * as S from '../style/home/HomeContainer';
 import type { Report } from '../types/report';
 
 export default function HomeReporteSection() {

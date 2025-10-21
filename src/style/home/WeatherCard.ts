@@ -59,6 +59,7 @@ export const DetailValue = styled.span`
 
 export const GlassCard = styled.div`
     /* 핵심 1: 반투명한 배경색 */
+    width: 90%;
     background: rgba(45, 55, 72, 0.7); // 어두운 계열의 반투명 배경
 
     /* 핵심 2: 뒷 배경을 블러 처리하여 흐릿하게 만듦 */

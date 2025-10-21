@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // import { dev_mode } from '../types/dev';
-import * as S from '../style/home/homeNoticeSection';
+import * as S from '../style/home/HomeContainer';
 import type { Notice } from '../types/notice';
 
 export default function HomeNoticeSection() {
@@ -26,9 +26,7 @@ export default function HomeNoticeSection() {
                             <S.Field>
                                 <strong>제목:</strong> {notice.title}
                             </S.Field>
-                            <S.Field>
-                                <strong>내용:</strong> {notice.content}
-                            </S.Field>
+
                             <S.Field>
                                 <strong>작성일:</strong> {new Date(notice.created_at).toLocaleString()}
                             </S.Field>

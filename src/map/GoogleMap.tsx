@@ -8,9 +8,10 @@ import useMeshPolling from './useMeshPolling';
 import { meshAdressArray } from '../meshAdress';
 
 const containerStyle = {
-    width: '1000px',
-    height: '522px',
+    width: '60vw',
+    height: '80vh',
     marginTop: '15px',
+    borderRadius: '12px',
 };
 
 const center = {

@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 
 export const Root = styled.div<{ active: string }>`
-    width: 50vw;
-    height: 10vh;
+    width: 10vw;
+    height: 60vh;
+    position: fixed;
+    right: 5%;
     display: flex;
+    flex-direction: column;
     gap: 12px;
     padding: 10px 20px;
     background-color: #f8f9fa;
