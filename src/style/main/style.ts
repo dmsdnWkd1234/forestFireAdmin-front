@@ -72,8 +72,6 @@ export const MenuText = styled.span`
 export const BetaIconContainer = styled.div`
     width: 25px;
     height: 13px;
-    border: 2px solid #a0a0a0;
-    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;

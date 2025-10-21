@@ -5,10 +5,20 @@ interface WeatherData {
     windDirection: string | null;
     windSpeed: string | null;
     weatherDescription: string | null;
-    date: string | null;
-    time: string | null;
+    date: string | null; // 기준 날짜 (예: 2025년 10월 21일)
+    time: string | null; // 기준 시간 (예: 14시 00분)
     loading: boolean;
     error: string | null;
+}
+
+// category 값에 따른 데이터를 저장할 인터페이스 (옵션)
+interface ApiItem {
+    baseDate: string;
+    baseTime: string;
+    category: string;
+    nx: number;
+    ny: number;
+    obsrValue: string; // 예보가 아닌 관측값이므로 obsrValue
 }
 
 export function useSeoulWeather(): WeatherData {
@@ -21,46 +31,55 @@ export function useSeoulWeather(): WeatherData {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const serviceKey = import.meta.env.VITE_WEATHER_API_KEY;
-    const nx = 55;
+    // .env 파일에서 API 키 가져오기 (Vite 환경)
+    // const serviceKey = import.meta.env.VITE_WEATHER_API_KEY;
+    const serviceKey = '4-H4GQ0DTG6h-BkNA3xuzQ';
+    const nx = 55; // 서울 중구 좌표 예시
     const ny = 127;
 
+    /**
+     * 초단기실황 API (getUltraSrtNcst)용 base_date, base_time 생성 함수
+     * 매 시 40분 이전에는 이전 시간대의 데이터를 요청해야 함
+     */
     const getBaseDateTime = (): { baseDate: string; baseTime: string } => {
         const now = new Date();
-        let year = now.getFullYear();
-        let month = now.getMonth() + 1;
-        let day = now.getDate();
-        const hours = now.getHours();
-        const validHours = [2, 5, 8, 11, 14, 17, 20, 23];
-        let baseHour = validHours.filter((h) => h <= hours).sort((a, b) => b - a)[0];
+        let base_date = now.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
 
-        if (baseHour === undefined) {
-            baseHour = 23;
-            const yesterday = new Date(now);
-            yesterday.setDate(yesterday.getDate() - 1);
-            year = yesterday.getFullYear();
-            month = yesterday.getMonth() + 1;
-            day = yesterday.getDate();
+        let base_time_hours = now.getHours();
+        const currentMinutes = now.getMinutes();
+
+        // 40분 이전이면 이전 시간 데이터 사용
+        if (currentMinutes < 40) {
+            // 자정 이전 시간 처리
+            if (base_time_hours === 0) {
+                const yesterday = new Date(now);
+                yesterday.setDate(yesterday.getDate() - 1);
+                base_date = yesterday.toISOString().slice(0, 10).replace(/-/g, '');
+                base_time_hours = 23;
+            } else {
+                base_time_hours -= 1;
+            }
         }
 
-        const baseDate = `${year}${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}`;
-        const baseTime = `${baseHour.toString().padStart(2, '0')}00`;
+        const base_time = `${base_time_hours.toString().padStart(2, '0')}00`; // HH00 형식
 
-        return { baseDate, baseTime };
+        return { baseDate: base_date, baseTime: base_time };
     };
 
-    const formatDateTime = (fcstDate: string, fcstTime: string): { formattedDate: string; formattedTime: string } => {
-        const year = fcstDate.slice(0, 4);
-        const month = fcstDate.slice(4, 6);
-        const day = fcstDate.slice(6, 8);
-        const hour = fcstTime.slice(0, 2);
-        const minute = fcstTime.slice(2, 4);
+    /** 날짜와 시간 문자열 포맷팅 (YYYY년 MM월 DD일, HH시 MM분) */
+    const formatDateTime = (baseDate: string, baseTime: string): { formattedDate: string; formattedTime: string } => {
+        const year = baseDate.slice(0, 4);
+        const month = baseDate.slice(4, 6);
+        const day = baseDate.slice(6, 8);
+        const hour = baseTime.slice(0, 2);
+        const minute = baseTime.slice(2, 4); // "00"
         return {
             formattedDate: `${year}년 ${month}월 ${day}일`,
-            formattedTime: `${hour}시 ${minute}분`,
+            formattedTime: `${hour}시 ${minute}분 기준`, // 기준 시간 명시
         };
     };
 
+    /** 풍향(Vector) 각도를 16방위 문자와 이모지로 변환 */
     const getWindDirection = (vec: number): string => {
         const directions = [
             { label: '북', emoji: '⬆️' },
@@ -80,11 +99,13 @@ export function useSeoulWeather(): WeatherData {
             { label: '북서', emoji: '↖️' },
             { label: '북북서', emoji: '⬆️↖️' },
         ];
-        const index = Math.round(vec / 22.5) % 16;
+        // API 명세에 따라 +11.25 후 22.5로 나누어 인덱스 계산
+        const index = Math.floor(((vec + 11.25) / 22.5) % 16);
         const dir = directions[index];
         return `${dir.label} (${dir.emoji})`;
     };
 
+    /** 강수형태(PTY) 코드에 따른 날씨 설명과 이모지 반환 */
     const getWeatherDescription = (pty: string): string => {
         switch (pty) {
             case '0':
@@ -95,8 +116,12 @@ export function useSeoulWeather(): WeatherData {
                 return '비/눈 🌨️';
             case '3':
                 return '눈 ❄️';
-            case '4':
-                return '소나기 🌦️';
+            case '5':
+                return '빗방울 💧'; // 4번(소나기)는 예보 코드
+            case '6':
+                return '빗방울/눈날림 🌨️💧';
+            case '7':
+                return '눈날림 🌨️';
             default:
                 return '정보 없음';
         }
@@ -107,49 +132,50 @@ export function useSeoulWeather(): WeatherData {
         setError(null);
         try {
             const { baseDate, baseTime } = getBaseDateTime();
-            const apiUrl = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${serviceKey}&numOfRows=1000&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+
+            // ★★★ 중요: Vite 프록시 설정을 사용해야 CORS 오류를 피할 수 있습니다 ★★★
+            // vite.config.js 설정 후 아래 주석 해제 및 절대 경로 apiUrl 주석 처리
+            const apiUrl = `/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+
+            // 프록시 미사용 시 직접 호출 (CORS 오류 발생 가능성 높음) - 개발용으로만 사용 권장
+            // const apiUrl = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=10&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&authKey=${serviceKey}`; // serviceKey 대신 authKey 사용 시
+
             const res = await fetch(apiUrl);
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+
             const data = await res.json();
-            if (data.response.header.resultCode !== '00') throw new Error(data.response.header.resultMsg || 'API 오류');
+            // API 자체 에러 처리 (resultCode가 '00'이 아닌 경우)
+            if (data.response?.header?.resultCode !== '00') {
+                throw new Error(data.response?.header?.resultMsg || 'API 응답 오류');
+            }
+            // items가 없는 경우 또는 배열이 아닌 경우 처리
+            const items: ApiItem[] = data.response?.body?.items?.item;
+            if (!items || !Array.isArray(items) || items.length === 0) {
+                throw new Error('날씨 데이터를 찾을 수 없습니다.');
+            }
 
-            const items: any[] = data.response.body.items.item;
-            const now = new Date();
-            const nowString = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now
-                .getDate()
-                .toString()
-                .padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}00`;
-
-            const filtered = items.filter((item) => item.fcstDate + item.fcstTime >= nowString);
-            const nearestFcstTime = [...filtered].sort((a, b) =>
-                (a.fcstDate + a.fcstTime).localeCompare(b.fcstDate + b.fcstTime)
-            )[0];
-
-            if (!nearestFcstTime) throw new Error('예보 데이터를 찾을 수 없습니다');
-
-            const { formattedDate, formattedTime } = formatDateTime(nearestFcstTime.fcstDate, nearestFcstTime.fcstTime);
+            // 날짜와 시간 상태 업데이트 (API 기준 시간 사용)
+            const { formattedDate, formattedTime } = formatDateTime(items[0].baseDate, items[0].baseTime);
             setDate(formattedDate);
             setTime(formattedTime);
 
-            const fcstDate = nearestFcstTime.fcstDate;
-            const fcstTime = nearestFcstTime.fcstTime;
+            // 각 category 값 찾아서 상태 업데이트
+            const findValue = (category: string): string | undefined =>
+                items.find((item) => item.category === category)?.obsrValue;
 
-            const getValue = (category: string) =>
-                items.find(
-                    (item) => item.category === category && item.fcstDate === fcstDate && item.fcstTime === fcstTime
-                )?.fcstValue;
+            const tempValue = findValue('T1H'); // 기온
+            const windVecValue = findValue('VEC'); // 풍향
+            const windSpdValue = findValue('WSD'); // 풍속
+            const ptyValue = findValue('PTY'); // 강수형태
 
-            const tmp = getValue('TMP');
-            const vec = getValue('VEC');
-            const wsd = getValue('WSD');
-            const pty = getValue('PTY');
-
-            if (tmp) setTemperature(`${tmp}°C`);
-            if (vec) setWindDirection(getWindDirection(Number(vec)));
-            if (wsd) setWindSpeed(`${wsd} m/s`);
-            if (pty !== undefined) setWeatherDescription(getWeatherDescription(pty));
+            if (tempValue) setTemperature(`${parseFloat(tempValue).toFixed(1)}°C`); // 소수점 1자리
+            if (windVecValue) setWindDirection(getWindDirection(Number(windVecValue)));
+            if (windSpdValue) setWindSpeed(`${windSpdValue} m/s`);
+            if (ptyValue !== undefined) setWeatherDescription(getWeatherDescription(ptyValue));
         } catch (err: any) {
-            setError(err.message || '에러 발생');
+            console.error('날씨 정보 가져오기 실패:', err); // 콘솔에 에러 로그 출력
+            setError(err.message || '날씨 정보를 가져오는 중 에러 발생');
+            // 에러 발생 시 기존 데이터 초기화 (선택 사항)
             setTemperature(null);
             setWindDirection(null);
             setWindSpeed(null);
@@ -162,10 +188,14 @@ export function useSeoulWeather(): WeatherData {
     };
 
     useEffect(() => {
-        fetchWeather();
-        const interval = setInterval(fetchWeather, 3 * 60 * 60 * 1000);
+        fetchWeather(); // 컴포넌트 마운트 시 즉시 실행
+
+        // 10분마다 날씨 정보 갱신 (600000ms = 10분)
+        const interval = setInterval(fetchWeather, 600000);
+
+        // 컴포넌트 언마운트 시 인터벌 정리
         return () => clearInterval(interval);
-    }, []);
+    }, []); // 빈 배열: 마운트 시 1회만 실행되도록 설정
 
     return {
         temperature,
