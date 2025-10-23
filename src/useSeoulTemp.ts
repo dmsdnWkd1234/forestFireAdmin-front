@@ -131,7 +131,7 @@ export function useSeoulWeather(): WeatherData {
         setError(null);
         try {
             const { baseDate, baseTime } = getBaseDateTime();
-            const apiUrl = `/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+            const apiUrl = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
             const res = await fetch(apiUrl);
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
             const text = await res.text();
