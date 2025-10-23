@@ -28,7 +28,7 @@ export default function FinalChartComponent() {
                         },
                     ],
                 };
-                setChartData(apiResponse); // 3. 데이터가 준비되면 state 업데이트
+                // setChartData(apiResponse); // 3. 데이터가 준비되면 state 업데이트
             }, 1500);
         };
 
@@ -54,7 +54,8 @@ export default function FinalChartComponent() {
             {/* chartData가 null이면 왼쪽(로딩)을, 값이 있으면 오른쪽(차트)을 렌더링 
         이것이 애니메이션을 보장하는 핵심입니다.
       */}
-            {!chartData ? <div>차트 데이터를 불러오는 중입니다...</div> : <Bar options={options} data={chartData} />}
+            {/* {!chartData ? <div>차트 데이터를 불러오는 중입니다...</div> : <Bar options={options} data={chartData} />} */}
         </div>
     );
 }
+// 대시보드 주석처리
