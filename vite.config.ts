@@ -13,6 +13,7 @@ export default defineConfig({
                 target: 'https://apihub.kma.go.kr/api', // /api 경로 포함
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ''), // 요청 시 /api 제거
+                secure: false,
             },
             // 만약 다른 API 프록시가 필요하면 여기에 추가
             // '/another-api': { ... }
