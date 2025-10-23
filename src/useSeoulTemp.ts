@@ -131,14 +131,7 @@ export function useSeoulWeather(): WeatherData {
         setError(null);
         try {
             const { baseDate, baseTime } = getBaseDateTime();
-
-            // ★★★ 중요: Vite 프록시 설정을 사용해야 CORS 오류를 피할 수 있습니다 ★★★
-            // vite.config.js 설정 후 아래 주석 해제 및 절대 경로 apiUrl 주석 처리
             const apiUrl = `/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
-
-            // 프록시 미사용 시 직접 호출 (CORS 오류 발생 가능성 높음) - 개발용으로만 사용 권장
-            // const apiUrl = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=10&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&authKey=${serviceKey}`; // serviceKey 대신 authKey 사용 시
-
             const res = await fetch(apiUrl);
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 

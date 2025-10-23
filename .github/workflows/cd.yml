@@ -21,12 +21,12 @@ jobs:
                   script: |
                       cd my-react-app
 
+                      git pull origin develop
+
                       echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" > .env
                       echo "VITE_BACK_URL=${{ secrets.VITE_BACK_URL }}" >> .env
                       echo "VITE_WEATHER_API_KEY=${{ secrets.VITE_WEATHER_API_KEY }}" >> .env
                       echo "VITE_PASSKEY=${{ secrets.VITE_PASSKEY }}" >> .env
-
-                      git pull origin develop
 
                       sudo docker stop my-react-app || true
                       sudo docker rm my-react-app || true
