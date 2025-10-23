@@ -135,7 +135,8 @@ export function useSeoulWeather(): WeatherData {
             const res = await fetch(apiUrl);
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
             const text = await res.text();
-            console.log('Fetch URL:', text); // 디버그용: 호출된 URL 출력
+            console.log('Fetch URL:', res); // 디버그용: 호출된 URL 출력
+            console.log('Response Text:', text); // 디버그용: 응답 본문 출력
 
             const data = await res.json();
             // API 자체 에러 처리 (resultCode가 '00'이 아닌 경우)
