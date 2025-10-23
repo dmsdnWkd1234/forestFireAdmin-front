@@ -134,6 +134,7 @@ export function useSeoulWeather(): WeatherData {
             const apiUrl = `/api/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
             const res = await fetch(apiUrl);
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+            console.log('Fetch URL:', apiUrl); // 디버그용: 호출된 URL 출력
 
             const data = await res.json();
             // API 자체 에러 처리 (resultCode가 '00'이 아닌 경우)
