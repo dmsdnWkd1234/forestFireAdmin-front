@@ -131,7 +131,7 @@ export function useSeoulWeather(): WeatherData {
         setError(null);
         try {
             const { baseDate, baseTime } = getBaseDateTime();
-            const apiUrl = `/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+            const apiUrl = `/api/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
             const res = await fetch(apiUrl);
             console.log('Fetching weather data from:', apiUrl);
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
