@@ -32,8 +32,7 @@ export function useSeoulWeather(): WeatherData {
     const [error, setError] = useState<string | null>(null);
 
     // .env 파일에서 API 키 가져오기 (Vite 환경)
-    // const serviceKey = import.meta.env.VITE_WEATHER_API_KEY;
-    const serviceKey = '4-H4GQ0DTG6h-BkNA3xuzQ';
+    const serviceKey = import.meta.env.VITE_WEATHER_API_KEY;
     const nx = 55; // 서울 중구 좌표 예시
     const ny = 127;
 
