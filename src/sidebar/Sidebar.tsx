@@ -1,4 +1,4 @@
-import * as S from '../style/main/style'; // 기존 스타일 파일 재사용
+import * as S from '../style/sidebar/style'; // 기존 스타일 파일 재사용
 import { GoHome, GoGraph } from 'react-icons/go';
 import { LuSiren } from 'react-icons/lu';
 import { BsChatLeftText } from 'react-icons/bs';

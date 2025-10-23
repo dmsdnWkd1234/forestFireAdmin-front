@@ -17,7 +17,8 @@ function App() {
             <S.Root>
                 {isAuthenticated() ? (
                     <>
-                        <Sidebar /> {/* 기존 nav 코드를 컴포넌트로 교체 */}
+                        <Sidebar />
+                        <S.ContentWrapper></S.ContentWrapper>
                         <main style={{ flex: 1, padding: '20px' }}>
                             <Routes>
                                 <Route path="/report" element={<Report />} />

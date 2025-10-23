@@ -1,5 +1,14 @@
 // WeatherCard.styles.js
 import styled from 'styled-components';
+// 1. 다른 파일에서 컴포넌트 가져오기
+import { GlassCard as BaseGlassCard } from './Glassmorphism .ts';
+import { CardTitle as BaseCardTitle } from './Text.ts';
+
+// 2. 중복 정의된 GlassCard, CardTitle 삭제
+//    대신 Base 컴포넌트를 확장(extend)하거나 그대로 사용합니다.
+//    여기서는 이름을 그대로 사용하기 위해 Base 컴포넌트를 import 합니다.
+export const GlassCard = BaseGlassCard;
+export const CardTitle = BaseCardTitle;
 
 // 날씨 정보의 메인 영역 (온도, 날씨 아이콘)
 export const MainInfoWrapper = styled.div`
@@ -7,6 +16,14 @@ export const MainInfoWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+
+    /* --- 모바일 최적화 (480px 이하) --- */
+    @media (max-width: 480px) {
+        flex-direction: column; // 세로로 쌓기
+        align-items: center; // 중앙 정렬
+        gap: 16px;
+    }
+    /* ------------------------------ */
 `;
 
 // 현재 온도를 크게 표시
@@ -17,21 +34,44 @@ export const Temperature = styled.div`
 
     span {
         font-size: 24px;
-        vertical-align: super; // '°C' 단위를 위첨자로 표시
+        vertical-align: super;
     }
+
+    /* --- 모바일 최적화 (480px 이하) --- */
+    @media (max-width: 480px) {
+        font-size: 40px; // 폰트 크기 살짝 줄이기
+        span {
+            font-size: 20px;
+        }
+    }
+    /* ------------------------------ */
 `;
 
 // 날씨 상태 아이콘
 export const WeatherIcon = styled.div`
     font-size: 64px;
-    color: #4299e1; // 포인트 컬러
+    color: #4299e1;
+
+    /* --- 모바일 최적화 (480px 이하) --- */
+    @media (max-width: 480px) {
+        font-size: 56px; // 폰트 크기 살짝 줄이기
+    }
+    /* ------------------------------ */
 `;
 
 // 보조 정보들을 담을 그리드 컨테이너
 export const DetailGrid = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr; // 2열 그리드
-    gap: 16px; // 아이템 사이 간격
+    grid-template-columns: 1fr 1fr; // 2열 (데스크탑 기본)
+    gap: 16px;
+
+    /* --- 모바일 최적화 (768px 이하) --- */
+    /* 2열이 좁아지기 시작하는 태블릿 시점부터 1열로 변경 */
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr; // 1열로 변경
+        gap: 20px; // 1열일 때 항목 간 간격을 조금 더 줌
+    }
+    /* ------------------------------ */
 `;
 
 // 개별 보조 정보 아이템
@@ -44,7 +84,7 @@ export const DetailItem = styled.div`
 // 보조 정보 라벨 (예: '풍속')
 export const DetailLabel = styled.span`
     font-size: 14px;
-    color: #a0aec0; // 보조 텍스트 컬러
+    color: #a0aec0;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -54,29 +94,5 @@ export const DetailLabel = styled.span`
 export const DetailValue = styled.span`
     font-size: 16px;
     font-weight: 500;
-    color: #e2e8f0; // 기본 텍스트 컬러
-`;
-
-export const GlassCard = styled.div`
-    /* 핵심 1: 반투명한 배경색 */
-    width: 90%;
-    background: rgba(45, 55, 72, 0.7); // 어두운 계열의 반투명 배경
-
-    /* 핵심 2: 뒷 배경을 블러 처리하여 흐릿하게 만듦 */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); // Safari 브라우저 호환성
-
-    /* 핵심 3: 빛나는 듯한 테두리 효과 */
-    border: 1px solid rgba(255, 255, 255, 0.15);
-
-    border-radius: 16px; // 둥근 모서리
-    padding: 24px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); // 입체감을 위한 그림자
-`;
-
-export const CardTitle = styled.h2`
-    font-size: 20px;
-    font-weight: 600;
-    color: #ffffff; // 카드 제목은 더 밝은 흰색
-    margin: 0 0 16px 0;
+    color: #e2e8f0;
 `;

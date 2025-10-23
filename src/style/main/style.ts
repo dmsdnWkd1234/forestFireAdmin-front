@@ -1,81 +1,45 @@
-import { NavLink } from 'react-router-dom';
+// main/style.ts
 import styled from 'styled-components';
 
-// 1. 전체 레이아웃 및 기본 스타일 (유지)
+// 1. Root: 전체 레이아웃 수정
 export const Root = styled.div`
-    /* ... 이전 코드와 동일 ... */
     width: 100vw;
     min-height: 100vh;
     display: flex;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: #f2f2f7;
-`;
 
-export const menuRootContainer = styled.nav`
-    /* ... 이전 코드와 동일 ... */
-    width: 350px;
-    height: 100%;
-    padding: 16px;
-    margin: 20px 0 0 20px;
-    background: #ffffff;
-    border-right: 1px solid #eaeaea;
-    border-radius: 16px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-`;
+    /* --- 데스크탑 (기본) --- */
+    flex-direction: row; // 가로 배치
 
-export const SidebarTitle = styled.h1`
-    /* ... 이전 코드와 동일 ... */
-    font-size: 1.2rem;
-    font-weight: 600;
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid black;
-`;
-
-// 2. 메뉴 아이템 스타일 (이 방식으로 통일)
-export const StyledNavLink = styled(NavLink)`
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-radius: 10px;
-    text-decoration: none;
-    color: #555;
-    font-weight: 500;
-    transition: background-color 0.2s ease, color 0.2s ease;
-
-    &:hover {
-        background-color: #f2f2f7;
-    }
-
-    &.active {
-        background-color: #e5e5ea;
-        color: #000;
-        font-weight: 600;
+    /* --- 모바일 (768px 이하) --- */
+    @media (max-width: 768px) {
+        flex-direction: column; // [핵심] 세로 배치로 변경
     }
 `;
 
-export const MenuIcon = styled.span`
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-`;
+// 2. [추가] ContentWrapper: 사이드바를 제외한 메인 콘텐츠 영역
+export const ContentWrapper = styled.div`
+    @media (max-width: 768px) {
+        flex: 1; // 남은 공간 모두 차지
+        display: flex;
+        align-items: flex-start; // 세로 상단 정렬 (공통)
+        box-sizing: border-box;
 
-export const MenuText = styled.span`
-    margin-left: 12px;
-    font-size: 0.95rem;
-    display: flex;
-`;
+        /* --- 데스크탑 (기본) --- */
+        /* [핵심] 왼쪽 정렬 + 여백 */
+        justify-content: flex-start;
+        padding: 20px;
+        margin-top: 20px; // 사이드바의 margin-top과 맞춤
+        margin-right: 20px;
 
-export const BetaIconContainer = styled.div`
-    width: 25px;
-    height: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a0a0a0;
-    font-size: 0.7rem;
-    margin-left: 4px;
+        /* --- 모바일 (768px 이하) --- */
+
+        /* [핵심] 중앙 정렬 */
+        justify-content: center;
+
+        padding: 24px 16px; // 모바일 여백
+        margin: -5%; // 세로 배치이므로 margin 리셋
+        width: 100%; // 세로 배치 시 너비 100%
+    }
 `;
