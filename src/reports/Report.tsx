@@ -16,7 +16,7 @@ export default function Report() {
     useEffect(() => {
         fetch(`${import.meta.env.VITE_BACK_URL}api/report`)
             .then((res) => res.json())
-            .then((data) => setReports(data))
+            .then((data) => setReports(data.reverse()))
             .catch((err) => console.error('신고 내역 불러오기 실패:', err));
     }, []);
 

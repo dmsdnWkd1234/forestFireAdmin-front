@@ -10,9 +10,15 @@ export const homeRoot = styled.div`
 export const homeUnderRoot = styled.div`
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* 데스크톱: 가로 배치 */
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* 자식 요소(Section)들이 같은 높이를 갖도록 (center 대신) */
+    flex-wrap: wrap; /* 혹시 모를 너비 초과 시 줄바꿈 */
+
+    @media (max-width: 768px) {
+        flex-direction: column; /* 모바일: 세로 배치 */
+        align-items: center; /* 세로 배치 시 중앙 정렬 */
+    }
 `;
 
 interface SectionProps {
@@ -20,12 +26,17 @@ interface SectionProps {
 }
 
 export const Section = styled.div<SectionProps>`
-    width: 45%;
+    width: 45%; /* 데스크톱: 45% 너비 */
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: ${({ margin }) => margin || '0'};
+
+    @media (max-width: 768px) {
+        width: 95%; /* 모바일: 너비를 거의 꽉 채움 */
+        margin: 10px 0; /* 좌우 마진 대신 상하 마진으로 변경 */
+    }
 `;
 
 export const Container = styled.div`
