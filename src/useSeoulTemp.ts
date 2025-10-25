@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+// 반환할 데이터 인터페이스 (기존과 동일)
 interface WeatherData {
     temperature: string | null;
     windDirection: string | null;
@@ -11,14 +12,35 @@ interface WeatherData {
     error: string | null;
 }
 
-// category 값에 따른 데이터를 저장할 인터페이스 (옵션)
-interface ApiItem {
-    baseDate: string;
-    baseTime: string;
-    category: string;
-    nx: number;
-    ny: number;
-    obsrValue: string; // 예보가 아닌 관측값이므로 obsrValue
+// OpenWeatherMap API 응답 타입 (필요한 부분만 정의)
+interface OpenWeatherApiResponse {
+    cod: number;
+    message?: string;
+    coord: {
+        lon: number;
+        lat: number;
+    };
+    weather: {
+        id: number;
+        main: string;
+        description: string;
+        icon: string;
+    }[];
+    main: {
+        temp: number;
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        humidity: number;
+    };
+    wind: {
+        speed: number;
+        deg: number;
+        gust?: number;
+    };
+    dt: number; // Unix timestamp (초 단위)
+    timezone: number; // UTC로부터의 시간차 (초 단위)
 }
 
 export function useSeoulWeather(): WeatherData {
@@ -33,52 +55,61 @@ export function useSeoulWeather(): WeatherData {
 
     // .env 파일에서 API 키 가져오기 (Vite 환경)
     const serviceKey = import.meta.env.VITE_WEATHER_API_KEY;
-    const nx = 55; // 서울 중구 좌표 예시
-    const ny = 127;
+    // 또는 사용자가 제공한 하드코딩된 키 사용:
+    // const serviceKey = '76a00e96c425fd0df4a786b204ce9c55';
 
-    /**
-     * 초단기실황 API (getUltraSrtNcst)용 base_date, base_time 생성 함수
-     * 매 시 40분 이전에는 이전 시간대의 데이터를 요청해야 함
+    // OpenWeatherMap API는 위도(lat), 경도(lon)를 사용합니다.
+    const lat = 55; // 서울이 아닌 Filimoshka 좌표 (제공된 응답 기준)
+    const lon = 127;
+
+    /** * [신규] Unix timestamp(초)를 날짜와 시간 문자열로 포맷팅
+     * (사용자의 로컬 시간대 기준)
      */
-    const getBaseDateTime = (): { baseDate: string; baseTime: string } => {
-        const now = new Date();
-        let base_date = now.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+    const formatUnixTimestamp = (dt: number): { formattedDate: string; formattedTime: string } => {
+        const dateObj = new Date(dt * 1000); // 밀리초로 변환
 
-        let base_time_hours = now.getHours();
-        const currentMinutes = now.getMinutes();
+        const year = dateObj.getFullYear();
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const hour = dateObj.getHours().toString().padStart(2, '0');
+        const minute = dateObj.getMinutes().toString().padStart(2, '0');
 
-        // 40분 이전이면 이전 시간 데이터 사용
-        if (currentMinutes < 40) {
-            // 자정 이전 시간 처리
-            if (base_time_hours === 0) {
-                const yesterday = new Date(now);
-                yesterday.setDate(yesterday.getDate() - 1);
-                base_date = yesterday.toISOString().slice(0, 10).replace(/-/g, '');
-                base_time_hours = 23;
-            } else {
-                base_time_hours -= 1;
-            }
-        }
-
-        const base_time = `${base_time_hours.toString().padStart(2, '0')}00`; // HH00 형식
-
-        return { baseDate: base_date, baseTime: base_time };
-    };
-
-    /** 날짜와 시간 문자열 포맷팅 (YYYY년 MM월 DD일, HH시 MM분) */
-    const formatDateTime = (baseDate: string, baseTime: string): { formattedDate: string; formattedTime: string } => {
-        const year = baseDate.slice(0, 4);
-        const month = baseDate.slice(4, 6);
-        const day = baseDate.slice(6, 8);
-        const hour = baseTime.slice(0, 2);
-        const minute = baseTime.slice(2, 4); // "00"
         return {
             formattedDate: `${year}년 ${month}월 ${day}일`,
-            formattedTime: `${hour}시 ${minute}분 기준`, // 기준 시간 명시
+            formattedTime: `${hour}시 ${minute}분 기준`,
         };
     };
 
-    /** 풍향(Vector) 각도를 16방위 문자와 이모지로 변환 */
+    /** * [신규] OpenWeatherMap 아이콘 코드를 이모지로 변환
+     */
+    const getWeatherDetails = (description: string, icon: string): string => {
+        const iconEmojiMap: { [key: string]: string } = {
+            '01d': '☀️', // clear sky (day)
+            '01n': '🌙', // clear sky (night)
+            '02d': '🌤️', // few clouds (day)
+            '02n': '☁️', // few clouds (night)
+            '03d': '☁️', // scattered clouds
+            '03n': '☁️', // scattered clouds
+            '04d': '☁️', // broken clouds (온흐림)
+            '04n': '☁️', // broken clouds
+            '09d': '🌧️', // shower rain
+            '09n': '🌧️', // shower rain
+            '10d': '🌦️', // rain (day)
+            '10n': '🌧️', // rain (night)
+            '11d': '🌩️', // thunderstorm
+            '11n': '🌩️', // thunderstorm
+            '13d': '❄️', // snow
+            '13n': '❄️', // snow
+            '50d': '🌫️', // mist
+            '50n': '🌫️', // mist
+        };
+        const emoji = iconEmojiMap[icon] || ''; // 맵에 없으면 빈 문자열
+        return `${description} ${emoji}`.trim(); // 예: "온흐림 ☁️"
+    };
+
+    /** * [유지] 풍향(Vector) 각도를 16방위 문자와 이모지로 변환
+     * (OpenWeatherMap의 'deg' 값에도 동일하게 적용 가능)
+     */
     const getWindDirection = (vec: number): string => {
         const directions = [
             { label: '북', emoji: '⬆️' },
@@ -98,78 +129,72 @@ export function useSeoulWeather(): WeatherData {
             { label: '북서', emoji: '↖️' },
             { label: '북북서', emoji: '⬆️↖️' },
         ];
-        // API 명세에 따라 +11.25 후 22.5로 나누어 인덱스 계산
         const index = Math.floor(((vec + 11.25) / 22.5) % 16);
         const dir = directions[index];
         return `${dir.label} (${dir.emoji})`;
     };
 
-    /** 강수형태(PTY) 코드에 따른 날씨 설명과 이모지 반환 */
-    const getWeatherDescription = (pty: string): string => {
-        switch (pty) {
-            case '0':
-                return '맑음 ☀️';
-            case '1':
-                return '비 🌧️';
-            case '2':
-                return '비/눈 🌨️';
-            case '3':
-                return '눈 ❄️';
-            case '5':
-                return '빗방울 💧'; // 4번(소나기)는 예보 코드
-            case '6':
-                return '빗방울/눈날림 🌨️💧';
-            case '7':
-                return '눈날림 🌨️';
-            default:
-                return '정보 없음';
-        }
-    };
-
+    /**
+     * [수정] OpenWeatherMap API 호출 로직
+     */
     const fetchWeather = async () => {
         setLoading(true);
         setError(null);
         try {
-            const { baseDate, baseTime } = getBaseDateTime();
-            const apiUrl = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?authKey=${serviceKey}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+            // KMA의 base_date, base_time 계산 로직(getBaseDateTime) 불필요
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=55&lon=127&units=metric&appid=${serviceKey}&lang=kr`;
+
             const res = await fetch(apiUrl);
-            if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-            const text = await res.text();
-            console.log('Fetch URL:', res); // 디버그용: 호출된 URL 출력
-            console.log('Response Text:', text); // 디버그용: 응답 본문 출력
 
-            const data = await res.json();
-            // API 자체 에러 처리 (resultCode가 '00'이 아닌 경우)
-            if (data.response?.header?.resultCode !== '00') {
-                throw new Error(data.response?.header?.resultMsg || 'API 응답 오류');
-            }
-            // items가 없는 경우 또는 배열이 아닌 경우 처리
-            const items: ApiItem[] = data.response?.body?.items?.item;
-            if (!items || !Array.isArray(items) || items.length === 0) {
-                throw new Error('날씨 데이터를 찾을 수 없습니다.');
+            // res.text() 후 res.json() 호출 시 에러 발생. res.json()만 사용
+            const data: OpenWeatherApiResponse = await res.json();
+
+            // HTTP 에러 처리 (res.ok 사용)
+            if (!res.ok) {
+                // API가 401, 404, 500 등을 반환할 때
+                throw new Error(data.message || `HTTP error: ${res.status}`);
             }
 
-            // 날짜와 시간 상태 업데이트 (API 기준 시간 사용)
-            const { formattedDate, formattedTime } = formatDateTime(items[0].baseDate, items[0].baseTime);
+            // OpenWeatherMap API 자체 에러 처리 (응답 코드가 200이 아닌 경우)
+            // (이미 !res.ok에서 잡히지만, 200 응답에 에러 메시지가 오는 경우 대비)
+            if (data.cod !== 200) {
+                throw new Error(data.message || 'API 응답 오류');
+            }
+
+            // KMA 'items' 배열 파싱 로직 대신, OpenWeatherMap JSON 구조 직접 파싱
+
+            // 1. 날짜와 시간 (Unix timestamp 파싱)
+            const { formattedDate, formattedTime } = formatUnixTimestamp(data.dt);
             setDate(formattedDate);
             setTime(formattedTime);
 
-            // 각 category 값 찾아서 상태 업데이트
-            const findValue = (category: string): string | undefined =>
-                items.find((item) => item.category === category)?.obsrValue;
+            // 2. 날씨 설명 (weather 배열의 첫 번째 항목 사용)
+            if (data.weather && data.weather.length > 0) {
+                const weatherInfo = data.weather[0];
+                setWeatherDescription(getWeatherDetails(weatherInfo.description, weatherInfo.icon));
+            } else {
+                setWeatherDescription('정보 없음');
+            }
 
-            const tempValue = findValue('T1H'); // 기온
-            const windVecValue = findValue('VEC'); // 풍향
-            const windSpdValue = findValue('WSD'); // 풍속
-            const ptyValue = findValue('PTY'); // 강수형태
+            // 3. 기온 (main.temp)
+            if (data.main?.temp !== undefined) {
+                setTemperature(`${data.main.temp.toFixed(1)}°C`);
+            }
 
-            if (tempValue) setTemperature(`${parseFloat(tempValue).toFixed(1)}°C`); // 소수점 1자리
-            if (windVecValue) setWindDirection(getWindDirection(Number(windVecValue)));
-            if (windSpdValue) setWindSpeed(`${windSpdValue} m/s`);
-            if (ptyValue !== undefined) setWeatherDescription(getWeatherDescription(ptyValue));
+            // 4. 풍향 (wind.deg) - 기존 getWindDirection 함수 재활용
+            if (data.wind?.deg !== undefined) {
+                setWindDirection(getWindDirection(data.wind.deg));
+            }
+
+            // 5. 풍속 (wind.speed)
+            if (data.wind?.speed !== undefined) {
+                // 소수점 1자리로 통일 (기온과 일관성)
+                setWindSpeed(`${data.wind.speed.toFixed(1)} m/s`);
+            }
         } catch (err: any) {
-            console.error('날씨 정보 가져오기 실패:', err); // 콘솔에 에러 로그 출력
+            console.error('날씨 정보 가져오기 실패:', err);
             setError(err.message || '날씨 정보를 가져오는 중 에러 발생');
+
             // 에러 발생 시 기존 데이터 초기화 (선택 사항)
             setTemperature(null);
             setWindDirection(null);
@@ -183,14 +208,20 @@ export function useSeoulWeather(): WeatherData {
     };
 
     useEffect(() => {
+        if (!serviceKey) {
+            setError('VITE_WEATHER_API_KEY가 설정되지 않았습니다.');
+            setLoading(false);
+            return;
+        }
+
         fetchWeather(); // 컴포넌트 마운트 시 즉시 실행
 
-        // 10분마다 날씨 정보 갱신 (600000ms = 10분)
-        const interval = setInterval(fetchWeather, 600000);
+        // 10분마다 날씨 정보 갱신 (OpenWeatherMap 무료 플랜은 1시간 주기가 더 적절할 수 있음)
+        const interval = setInterval(fetchWeather, 600000); // 10분
 
         // 컴포넌트 언마운트 시 인터벌 정리
         return () => clearInterval(interval);
-    }, []); // 빈 배열: 마운트 시 1회만 실행되도록 설정
+    }, [serviceKey]); // serviceKey가 변경될 경우에도 useEffect가 재실행되도록 추가
 
     return {
         temperature,
