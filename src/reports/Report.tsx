@@ -102,7 +102,16 @@ export default function Report() {
                                                 {report.type}
                                             </S.TypeBadge>
                                         </S.TableData>
-                                        <S.TableData>{report.created_at}</S.TableData>
+                                        <S.TableData>
+                                            {new Date(report.created_at).toLocaleString('ko-KR', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: false, // 24시간 표기
+                                            })}
+                                        </S.TableData>
                                     </S.TableRow>
                                 ))}
                             </tbody>

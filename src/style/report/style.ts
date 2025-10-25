@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
     /* max-width: 30vw;  => 이 부분은 전체 페이지 레이아웃에 따라 조정 필요합니다. */
     /* 현재는 컨텐츠 영역이 꽉 차도록 하거나, 고정된 최대 너비를 줄 수 있습니다. */
-    width: 100%; /* 부모 컨테이너에 맞춰 너비 조정 */
+    width: 95%; /* 부모 컨테이너에 맞춰 너비 조정 */
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f7fa; /* 배경색 추가 */
