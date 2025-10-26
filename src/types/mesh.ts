@@ -1,4 +1,5 @@
 export interface MeshData {
+    name: string;
     id: number;
     unicast_address: number;
     Temp: number;

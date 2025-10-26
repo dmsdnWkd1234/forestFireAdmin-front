@@ -1,36 +1,41 @@
 import styled from 'styled-components';
 
 export const Root = styled.div<{ active: string }>`
-    /* 1. 기본 스타일 (데스크톱) */
-    width: fit-content; /* 컨텐츠 크기에 맞춤 (기존 10vw보다 이게 우선됨) */
-    height: 60vh; /* 데스크톱에선 세로로 길게 */
+    /* ... (1. 기본 스타일 (데스크톱)은 그대로) ... */
+    width: fit-content;
+    height: 60vh;
     display: flex;
-    flex-direction: column; /* 데스크톱: 세로 정렬 */
+    flex-direction: column;
     gap: 12px;
     padding: 10px 20px;
     margin-right: 25px;
     background-color: #f8f9fa;
     border-radius: 12px;
     box-shadow: ${({ active }) =>
-        active == '전체' ? '0 4px 12px rgba(0, 0, 0, 0.15)' : '0 2px 8px rgba(0, 0, 0, 0.05)'};
+        active == '기본' ? '0 4px 12px rgba(0, 0, 0, 0.15)' : '0 2px 8px rgba(0, 0, 0, 0.05)'};
 
     /* * 2. 모바일 (768px 이하) 미디어 쿼리 
      */
     @media (max-width: 768px) {
-        width: 100%; /* 모바일에선 가로로 꽉 참 */
-        height: auto; /* 높이는 컨텐츠에 맞게 자동 조절 */
-        flex-direction: row; /* 요청하신 대로 내부 요소 가로 정렬 */
-        align-items: center; /* 가로 정렬 시 세로축 중앙 정렬 */
+        width: 100%;
+        height: auto;
+        flex-direction: row;
 
-        /* * 가로 스크롤 (선택 사항): 
-         * 내부 요소가 너무 많아 삐져나갈 경우를 대비 
-         */
-        overflow-x: auto;
+        /* ▼▼▼ 여기가 수정되었습니다 ▼▼▼ */
 
-        /* * width: 100%가 padding을 포함하도록 설정
-         * (이전 단계에서 이미 추가했다면 생략 가능) 
-         */
+        /* 1. (기존) overflow-x: auto; -> (변경) flex-wrap: wrap; */
+        /* overflow-x: auto; */ /* <- 이 줄을 삭제하거나 주석 처리 */
+        flex-wrap: wrap; /* <- 이 줄을 추가 (줄바꿈 허용) */
+
+        /* 2. (선택) 버튼들을 보기 좋게 중앙 정렬 */
+        justify-content: center;
+
+        /* (기존) align-items: center; -> 유지 (세로축 중앙 정렬) */
+        align-items: center;
+
         box-sizing: border-box;
+
+        margin-top: -20px;
     }
 `;
 
@@ -44,19 +49,23 @@ export const MobileArraySection = styled.div`
     flex-direction: column;
 `;
 
-export const MeshDataTile = styled.button`
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
+// ... (S.Root 스타일은 그대로) ...
+
+// active prop을 받도록 수정
+export const MeshDataTile = styled.button<{ active?: boolean }>`
+    background-color: ${({ active }) => (active ? '#3498db' : '#ffffff')}; // 활성/비활성 색상
+    color: ${({ active }) => (active ? '#ffffff' : '#343a40')};
+    border: 1px solid ${({ active }) => (active ? '#3498db' : '#dee2e6')};
     border-radius: 8px;
     padding: 10px 16px;
     font-size: 15px;
-    color: #343a40;
+    font-weight: ${({ active }) => (active ? 'bold' : 'normal')}; // 활성 폰트
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 
     &:hover {
-        background-color: #e9ecef;
-        border-color: #ced4da;
+        background-color: ${({ active }) => (active ? '#2980b9' : '#e9ecef')};
+        border-color: ${({ active }) => (active ? '#2980b9' : '#ced4da')};
     }
 
     &:active {

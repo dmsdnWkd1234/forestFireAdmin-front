@@ -4,3 +4,11 @@ export const meshAdressArray = [
     { id: 3, name: '초안산 등산로1', unicast_address: 16, lat: 37.633011, lng: 127.054693 },
     { id: 4, name: '초안산 등산로2', unicast_address: 10, lat: 37.63298, lng: 127.054856 },
 ];
+
+export interface meshAdress {
+    id: number;
+    lat: number;
+    lng: number;
+    name: string;
+    unicast_address: number;
+}
