@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import * as S from '../style/notice/readUpdateNotice'; // 새로 만든 스타일 파일 import
 
 export default function DeleteNotice({ no }: { no: number }) {
     const [id, setId] = useState(0);
@@ -12,6 +13,10 @@ export default function DeleteNotice({ no }: { no: number }) {
     };
 
     const deleteNotice = () => {
+        if (!window.confirm('정말로 이 공지를 삭제하시겠습니까?')) {
+            return;
+        }
+
         fetch(`${import.meta.env.VITE_BACK_URL}api/deleteNotice`, {
             method: 'DELETE',
             headers: {
@@ -22,13 +27,21 @@ export default function DeleteNotice({ no }: { no: number }) {
             }),
         })
             .then((res) => res.json())
-            .then((result) => (result ? alert('성공적으로 삭제되었습니다') : alert('삭제 실패')))
-            .catch((err) => console.error('글 작성:', err));
+            .then((result) => {
+                if (result) {
+                    alert('성공적으로 삭제되었습니다');
+                    window.location.reload(); // 간단하게 페이지 새로고침
+                } else {
+                    alert('삭제 실패');
+                }
+            })
+            .catch((err) => console.error('글 삭제:', err));
     };
 
     return (
         <>
-            <button onClick={deleteNotice}>삭제</button>
+            {/* DangerButton 스타일 적용 */}
+            <S.DangerButton onClick={deleteNotice}>삭제</S.DangerButton>
         </>
     );
 }

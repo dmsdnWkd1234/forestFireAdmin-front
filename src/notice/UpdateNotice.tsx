@@ -1,32 +1,51 @@
 import { useEffect, useState } from 'react';
-import type { UpdateNotice } from '../types/notice';
+import type { Notice, UpdateNotice as UpdateNoticeType } from '../types/notice';
+import * as S from '../style/notice/readUpdateNotice'; // 새로 만든 스타일 파일 import
 // import { dev_mode } from '../types/dev';
 
-export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated: () => void }) {
-    const [updateState, setUpdateState] = useState(false);
-    const [notice, setNotice] = useState<UpdateNotice>({
+interface UpdateNoticeProps {
+    initialNotice: Notice;
+    onUpdated: () => void;
+    onCancel: () => void;
+}
+
+export default function UpdateNotice({ initialNotice, onUpdated, onCancel }: UpdateNoticeProps) {
+    const [notice, setNotice] = useState<UpdateNoticeType>({
         id: 0,
         title: '',
         content: '',
         type: '공지',
     });
 
+    // initialNotice가 변경될 때마다 폼 상태 업데이트
     useEffect(() => {
-        // fetch(`${dev_mode}/api/notice/${no}`)
-        fetch(`${import.meta.env.VITE_BACK_URL}api/notice/${no}`)
-            .then((res) => res.json())
-            .then((data) => setNotice(data))
-            .catch((err) => console.error('공지 불러오기 실패:', err));
-    }, [no, updateState]);
+        if (initialNotice) {
+            setNotice({
+                id: initialNotice.id,
+                title: initialNotice.title,
+                content: initialNotice.content,
+                type: initialNotice.type,
+            });
+        }
+    }, [initialNotice]);
 
     const updateNotice = () => {
+        if (!notice.title.trim()) {
+            alert('제목을 입력해주세요.');
+            return;
+        }
+        if (!notice.content.trim()) {
+            alert('내용을 입력해주세요.');
+            return;
+        }
+
         fetch(`${import.meta.env.VITE_BACK_URL}api/updateNotice`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: no,
+                id: notice.id,
                 title: notice.title,
                 type: notice.type,
                 content: notice.content,
@@ -36,12 +55,12 @@ export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated:
             .then((result) => {
                 if (result) {
                     alert('수정 성공');
-                    onUpdated();
+                    onUpdated(); // 부모(ReadNotice)에게 수정 완료 알림
                 } else {
                     alert('수정 실패');
                 }
             })
-            .catch((err) => console.error('글 작성:', err));
+            .catch((err) => console.error('글 수정:', err));
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -54,23 +73,45 @@ export default function UpdateNotice({ no, onUpdated }: { no: number; onUpdated:
 
     return (
         <>
-            <button
-                onClick={() => {
-                    if (updateState) updateNotice();
-                    setUpdateState(!updateState);
-                }}
-            >
-                {!updateState ? '수정' : '완료'}
-            </button>
-            <textarea name="title" value={notice.title} onChange={handleChange} readOnly={!updateState} />
-            <textarea name="content" value={notice.content} onChange={handleChange} readOnly={!updateState} />
-            <select name="type" value={notice.type} onChange={handleChange} disabled={!updateState}>
-                <option value="공지" selected>
-                    공지
-                </option>
-                <option value="긴급">긴급</option>
-                <option value="대피">대피</option>
-            </select>
+            {/* 수정 폼 */}
+            <S.EditForm>
+                <S.FormGroup>
+                    <label htmlFor="update-title">제목</label>
+                    <S.StyledTextArea
+                        id="update-title"
+                        name="title"
+                        value={notice.title}
+                        onChange={handleChange}
+                        rows={1}
+                    />
+                </S.FormGroup>
+
+                <S.FormGroup>
+                    <label htmlFor="update-type">카테고리</label>
+                    <S.StyledSelect id="update-type" name="type" value={notice.type} onChange={handleChange}>
+                        <option value="공지">공지</option>
+                        <option value="긴급">긴급</option>
+                        <option value="대피">대피</option>
+                    </S.StyledSelect>
+                </S.FormGroup>
+
+                <S.FormGroup>
+                    <label htmlFor="update-content">내용</label>
+                    <S.StyledContentTextArea
+                        id="update-content"
+                        name="content"
+                        value={notice.content}
+                        onChange={handleChange}
+                        rows={8}
+                    />
+                </S.FormGroup>
+            </S.EditForm>
+
+            {/* 완료 / 취소 버튼 */}
+            <S.ButtonContainer>
+                <S.SecondaryButton onClick={onCancel}>취소</S.SecondaryButton>
+                <S.PrimaryButton onClick={updateNotice}>완료</S.PrimaryButton>
+            </S.ButtonContainer>
         </>
     );
 }
