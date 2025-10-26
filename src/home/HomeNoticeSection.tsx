@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 // import { dev_mode } from '../types/dev';
 import * as S from '../style/home/HomeContainer';
 import type { Notice } from '../types/notice';
+import { Link } from 'react-router-dom';
 
 export default function HomeNoticeSection() {
     const [notices, setNotices] = useState<Notice[]>([]);
@@ -22,15 +23,17 @@ export default function HomeNoticeSection() {
             ) : (
                 <S.Grid>
                     {notices.map((notice) => (
-                        <S.Card key={notice.id}>
-                            <S.Field>
-                                <strong>제목:</strong> {notice.title}
-                            </S.Field>
+                        <Link to={'/notice'} style={{ textDecoration: 'none' }}>
+                            <S.Card key={notice.id}>
+                                <S.Field>
+                                    <strong>제목:</strong> {notice.title}
+                                </S.Field>
 
-                            <S.Field>
-                                <strong>작성일:</strong> {new Date(notice.created_at).toLocaleString()}
-                            </S.Field>
-                        </S.Card>
+                                <S.Field>
+                                    <strong>작성일:</strong> {new Date(notice.created_at).toLocaleString()}
+                                </S.Field>
+                            </S.Card>
+                        </Link>
                     ))}
                 </S.Grid>
             )}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 // import { dev_mode } from '../types/dev';
 import * as S from '../style/home/HomeContainer';
 import type { Report } from '../types/report';
+import { Link } from 'react-router-dom';
 
 export default function HomeReporteSection() {
     const [reports, setReports] = useState<Report[]>([]);
@@ -23,18 +24,20 @@ export default function HomeReporteSection() {
                 <S.Grid>
                     {reports.map((report) => (
                         <S.Card key={report.id}>
-                            <S.Field>
-                                <strong>신고 번호:</strong> {report.id}
-                            </S.Field>
-                            <S.Field>
-                                <strong>메쉬 번호:</strong> {report.mesh_id}
-                            </S.Field>
-                            <S.Field>
-                                <strong>유형:</strong> {report.type}
-                            </S.Field>
-                            <S.Field>
-                                <strong>일시:</strong> {report.created_at}
-                            </S.Field>
+                            <Link to={'/report'} style={{ textDecoration: 'none' }}>
+                                <S.Field>
+                                    <strong>신고 번호:</strong> {report.id}
+                                </S.Field>
+                                <S.Field>
+                                    <strong>메쉬 번호:</strong> {report.mesh_id}
+                                </S.Field>
+                                <S.Field>
+                                    <strong>유형:</strong> {report.type}
+                                </S.Field>
+                                <S.Field>
+                                    <strong>일시:</strong> {new Date(report.created_at).toLocaleString()}
+                                </S.Field>
+                            </Link>
                         </S.Card>
                     ))}
                 </S.Grid>

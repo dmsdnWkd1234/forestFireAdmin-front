@@ -1,6 +1,27 @@
 import styled from 'styled-components';
 
 // 기존에 만들었던 ContentBox 재사용
+
+export const RootContainer = styled.div`
+    display: flex;
+    flex-direction: row-reverse; /* 기본(데스크톱)은 가로 정렬 */
+
+    /* 768px 이하 모바일 화면일 때 */
+    @media (max-width: 768px) {
+        flex-direction: column; /* 세로 정렬로 변경 */
+    }
+`;
+
+export const MapWrapper = styled.div`
+    flex: 1; /* 데스크톱에서 남은 공간 모두 차지 */
+    width: 100%; /* 너비를 100%로 설정 (flex-basis 대체) */
+
+    @media (max-width: 768px) {
+        width: 100%; /* 모바일에서 너비 100% */
+        flex: 1; /* 세로로 쌓일 때 공간 차지 (필요시 높이 조절) */
+    }
+`;
+
 export const ContentBox = styled.div`
     background-color: #ffffff;
     padding: 24px 32px;

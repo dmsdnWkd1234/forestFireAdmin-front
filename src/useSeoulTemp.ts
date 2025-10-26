@@ -142,7 +142,7 @@ export function useSeoulWeather(): WeatherData {
         setError(null);
         try {
             // KMA의 base_date, base_time 계산 로직(getBaseDateTime) 불필요
-            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=55&lon=127&units=metric&appid=${serviceKey}&lang=kr`;
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=37.632239&lon=127.05501&units=metric&appid=${serviceKey}&lang=kr`;
 
             const res = await fetch(apiUrl);
 
