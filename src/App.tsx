@@ -4,6 +4,7 @@ import Report from './reports/Report.tsx';
 import GoogleMapComponent from './map/GoogleMap.tsx';
 import Home from './home/Home.tsx';
 import Notice from './notice/Notice.tsx';
+import Chat from './chat/Chat.tsx';
 // import CreateNotice from './notice/CreateNotice.tsx';
 import Login from './login/LoginPage.tsx';
 import Sidebar from './sidebar/Sidebar.tsx'; // Sidebar 컴포넌트 import
@@ -26,7 +27,7 @@ function App() {
                                 <Route path="/home" element={<Home />} />
                                 <Route path="/notice" element={<Notice />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
-                                <Route path="/asktoai" element={<div>AI 분석 페이지 (개발 중)</div>} />
+                                <Route path="/ai" element={<Chat />} />
                                 <Route path="*" element={<Navigate to="/home" replace />} />
                             </Routes>
                         </main>

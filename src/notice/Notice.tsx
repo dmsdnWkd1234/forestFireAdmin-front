@@ -16,13 +16,15 @@ export default function NoticeBoard() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 7; // 페이지당 10개 항목
     // ---
-
+    const data = 0;
     useEffect(() => {
         // fetch(`${dev_mode}api/notice`)
         fetch(`${import.meta.env.VITE_BACK_URL}api/notice`)
             .then((res) => res.json())
             .then((data) => setNotices(data.reverse()))
             .catch((err) => console.error('공지 불러오기 실패:', err));
+
+        console.log(notices);
     }, []);
 
     // 날짜 포맷 함수

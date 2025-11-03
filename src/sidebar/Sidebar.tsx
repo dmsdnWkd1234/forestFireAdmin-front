@@ -53,7 +53,7 @@ function Sidebar() {
                 </S.MenuIcon>
             </S.StyledNavLink>
 
-            <S.StyledNavLink to="/asktoai">
+            <S.StyledNavLink to="/ai">
                 <S.MenuIcon>
                     <RiRobot3Line />
                     <S.MenuText>
