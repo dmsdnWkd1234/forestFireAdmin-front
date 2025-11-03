@@ -77,20 +77,46 @@ export const MessageContent = styled.div<isUser>`
 
 // ★ 4. MessageBubble 스타일 수정 (모서리 뾰족하게)
 export const MessageBubble = styled.div<isUser>`
-    max-width: 100%; /* 부모(MessageContent) 너비에 맞춤 */
+    max-width: 100%;
     padding: 10px 15px;
     border-radius: 18px;
     background-color: ${(props) => (props.$isUser ? '#007bff' : '#e0e0e0')};
     color: ${(props) => (props.$isUser ? '#ffffff' : '#333333')};
     word-break: break-word;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
-    /* ★ 유저 말풍선은 오른쪽 끝 모서리 뾰족하게 */
     border-bottom-right-radius: ${(props) => (props.$isUser ? '4px' : '18px')};
-    /* ★ AI 말풍선은 왼쪽 끝 모서리 뾰족하게 */
     border-bottom-left-radius: ${(props) => (props.$isUser ? '18px' : '4px')};
-`;
 
+    /* ★★★ 마크다운 태그 스타일 초기화 ★★★ */
+    & p {
+        margin: 0 0 5px 0; /* 단락(p) 간격 살짝만 (마지막은 0) */
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    & ul,
+    & ol {
+        margin: 5px 0;
+        padding-left: 20px; /* 리스트 들여쓰기 */
+    }
+    & li {
+        margin-bottom: 3px;
+    }
+    & pre {
+        /* 코드 블럭 스타일 (예시) */
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto; /* 코드 길면 스크롤 */
+    }
+    & code {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #eee;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+`;
 // ★ 5. 복사 버튼 스타일 추가
 export const CopyButton = styled.button`
     background: transparent;

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as S from '../style/chat/style'; // 네 스타일 파일 경로
+import ReactMarkdown from 'react-markdown';
 
 function Chat() {
     // ★ 백엔드 API 호출 로직
@@ -95,7 +96,14 @@ function Chat() {
                             {chat.sender === 'ai' && <S.Avatar />}
 
                             <S.MessageContent $isUser={chat.sender === 'user'}>
-                                <S.MessageBubble $isUser={chat.sender === 'user'}>{chat.text}</S.MessageBubble>
+                                <S.MessageBubble $isUser={chat.sender === 'user'}>
+                                    {/* ★ 2. 여기가 핵심: 텍스트 대신 ReactMarkdown 컴포넌트 사용 */}
+                                    {chat.sender === 'user' ? (
+                                        chat.text // 유저 메시지는 마크다운 필요 없음
+                                    ) : (
+                                        <ReactMarkdown>{chat.text}</ReactMarkdown> // AI 메시지만 변환
+                                    )}
+                                </S.MessageBubble>
 
                                 {/* ★ 3. 복사 버튼 UI 수정 (조건부 렌더링) */}
                                 {chat.sender === 'ai' && (
