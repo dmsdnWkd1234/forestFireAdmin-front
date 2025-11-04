@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 
 function Chat() {
     // ★ 백엔드 API 호출 로직
-    const callChatbotApi = async (message: any) => {
+    const callChatbotApi = async (message: string, history: []) => {
         try {
             const response = await fetch('http://localhost:3002/api/postToAi', {
                 // 네 백엔드 주소
@@ -12,7 +12,7 @@ function Chat() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: message }),
+                body: JSON.stringify({ message: message, history: history }),
             });
 
             if (!response.ok) {
@@ -67,10 +67,13 @@ function Chat() {
         if (isLoading || !currentMessage) return;
 
         setIsLoading(true);
+
+        const currentHistory: any = chatHistory;
+
         addMessageToHistory('user', currentMessage);
         setMessage('');
 
-        const result = await callChatbotApi(currentMessage);
+        const result = await callChatbotApi(currentMessage, currentHistory);
 
         if (result.success) {
             addMessageToHistory('ai', result.reply);

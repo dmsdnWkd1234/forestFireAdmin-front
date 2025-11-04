@@ -74,12 +74,11 @@ export const ReportTable = styled.table`
 `;
 
 export const TableHeader = styled.th`
-    background-color: #ecf0f1;
+    background-color: #f9fafb;
     color: #34495e;
     font-weight: 700;
     padding: 15px 20px;
-    text-align: left;
-    border-bottom: 2px solid #bdc3c7;
+    text-align: center;
     font-size: 0.95em;
 `;
 
@@ -97,6 +96,7 @@ export const TableData = styled.td`
     border-bottom: 1px solid #eaeff3;
     color: #555;
     font-size: 0.9em;
+    text-align: center;
 `;
 
 // 신고 유형을 시각적으로 강조하는 뱃지 스타일
@@ -120,9 +120,9 @@ export const Pagination = styled.div`
 `;
 
 export const PageButton = styled.button<{ active: boolean }>`
-    background-color: ${({ active }) => (active ? '#3498db' : '#ecf0f1')};
+    background-color: ${({ active }) => (active ? '#007bff' : '#ecf0f1')};
     color: ${({ active }) => (active ? '#fff' : '#34495e')};
-    border: 1px solid ${({ active }) => (active ? '#3498db' : '#bdc3c7')};
+    border: 1px solid ${({ active }) => (active ? '#007bff' : '#bdc3c7')};
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
@@ -131,8 +131,8 @@ export const PageButton = styled.button<{ active: boolean }>`
     min-width: 40px; /* 버튼 최소 너비 */
 
     &:hover {
-        background-color: ${({ active }) => (active ? '#2980b9' : '#dcdfe1')};
-        border-color: ${({ active }) => (active ? '#2980b9' : '#aeb7bd')};
+        background-color: ${({ active }) => (active ? '#007bff' : '#dcdfe1')};
+        border-color: ${({ active }) => (active ? '#007bff' : '#aeb7bd')};
         transform: translateY(-1px);
     }
     &:disabled {

@@ -57,7 +57,7 @@ export const ListPageHeader = styled.header`
 `;
 
 export const listHeaderBox = styled.header`
-    width: 100%;
+    width: 95%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -73,7 +73,7 @@ export const listHeaderBox = styled.header`
 `;
 
 export const listRootBox = styled.div`
-    width: 100%;
+    width: 95%;
     display: flex;
     flex-direction: row;
     padding: 20px;

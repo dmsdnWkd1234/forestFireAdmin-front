@@ -1,7 +1,7 @@
-import styled, { keyframes } from 'styled-components'; // ★ keyframes 임포트
+import styled, { keyframes } from 'styled-components';
 
 interface isUser {
-    $isUser: boolean; // ★ string 말고 boolean이 맞다
+    $isUser: boolean;
 }
 
 export const PageContainer = styled.div`
@@ -11,6 +11,12 @@ export const PageContainer = styled.div`
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
+
+    @media (max-width: 768px) {
+        margin: 0;
+        padding: 0; /* 모바일에선 여백 없음 */
+        gap: 0;
+    }
 `;
 
 export const Card = styled.div`
@@ -21,6 +27,13 @@ export const Card = styled.div`
     min-height: 200px;
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 768px) {
+        border-radius: 0; /* 화면 꽉 채우게 */
+        box-shadow: none;
+        padding: 15px; /* 모바일 패딩 줄임 */
+        min-height: 100vh; /* 모바일에선 화면 꽉 채움 */
+    }
 `;
 
 export const CardHeader = styled.h2`
@@ -29,6 +42,11 @@ export const CardHeader = styled.h2`
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
+
+    @media (max-width: 768px) {
+        font-size: 1.25em; /* 모바일 폰트 크기 줄임 */
+        margin-bottom: 15px;
+    }
 `;
 
 export const ChatWindow = styled.div`
@@ -41,41 +59,54 @@ export const ChatWindow = styled.div`
     background-color: #fbfbfb;
     display: flex;
     flex-direction: column;
-    gap: 15px; // ★ 메시지 간격 살짝 늘림
+    gap: 15px;
+
+    @media (max-width: 768px) {
+        padding: 10px; /* 모바일 채팅창 패딩 줄임 */
+    }
 `;
 
-// ★ 1. AI 아바타 (초상화) 스타일 추가
 export const Avatar = styled.div`
     width: 80px;
     height: 80px;
-    max-width: 80px;
+    min-width: 80px; /* ★ 네가 80으로 키웠길래 찌그러짐 방지용 */
     border-radius: 50%;
-    /* ★ 기존 배경색, 글자색, 글자 정렬은 필요 없음 (이미지로 대체) */
-    background-color: transparent; /* 배경색 투명하게 */
-    background-image: url('/images/weather_fairy_bot.png'); /* ★ 이미지 경로 */
-    background-size: cover; /* 이미지가 꽉 차게 */
-    background-position: center; /* 이미지 중앙 정렬 */
-    background-repeat: no-repeat; /* 이미지 반복 안 함 */
+    background-color: transparent;
+    background-image: url('/images/weather_fairy_bot.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     flex-shrink: 0;
+
+    @media (max-width: 768px) {
+        /* ★ 모바일에선 좆나 크니까 다시 40px로 줄임 */
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
 `;
 
-// ★ 2. ChatMessage 스타일 수정 (아바타랑 말풍선 담는 컨테이너)
 export const ChatMessage = styled.div<isUser>`
     display: flex;
-    align-items: flex-start; /* ★ 상단 정렬 */
-    gap: 10px; /* ★ 아바타와 말풍선 사이 간격 */
+    align-items: flex-start;
+    gap: 10px;
     justify-content: ${(props) => (props.$isUser ? 'flex-end' : 'flex-start')};
 `;
 
-// ★ 3. 말풍선 + 복사버튼 감싸는 래퍼 추가
 export const MessageContent = styled.div<isUser>`
     display: flex;
-    align-items: center; /* 말풍선과 복사 버튼 세로 정렬 */
+    align-items: center;
     flex-direction: ${(props) => (props.$isUser ? 'row-reverse' : 'row')};
-    max-width: calc(100% - 60px); /* 아바타+간격 뺀 나머지 */
+
+    /* ★★★ 네 코드 찐빠난 거 수정: 80px 아바타 + 10px 갭 = 90px 빼야지 60px이 아님 */
+    max-width: calc(100% - 90px);
+
+    @media (max-width: 768px) {
+        /* ★ 모바일에선 40px 아바타 + 10px 갭 = 50px */
+        max-width: calc(100% - 50px);
+    }
 `;
 
-// ★ 4. MessageBubble 스타일 수정 (모서리 뾰족하게)
 export const MessageBubble = styled.div<isUser>`
     max-width: 100%;
     padding: 10px 15px;
@@ -87,9 +118,9 @@ export const MessageBubble = styled.div<isUser>`
     border-bottom-right-radius: ${(props) => (props.$isUser ? '4px' : '18px')};
     border-bottom-left-radius: ${(props) => (props.$isUser ? '18px' : '4px')};
 
-    /* ★★★ 마크다운 태그 스타일 초기화 ★★★ */
+    /* 마크다운 태그 스타일 (이건 그대로) */
     & p {
-        margin: 0 0 5px 0; /* 단락(p) 간격 살짝만 (마지막은 0) */
+        margin: 0 0 5px 0;
         &:last-child {
             margin-bottom: 0;
         }
@@ -97,18 +128,17 @@ export const MessageBubble = styled.div<isUser>`
     & ul,
     & ol {
         margin: 5px 0;
-        padding-left: 20px; /* 리스트 들여쓰기 */
+        padding-left: 20px;
     }
     & li {
         margin-bottom: 3px;
     }
     & pre {
-        /* 코드 블럭 스타일 (예시) */
         background-color: #f0f0f0;
         color: #333;
         padding: 10px;
         border-radius: 5px;
-        overflow-x: auto; /* 코드 길면 스크롤 */
+        overflow-x: auto;
     }
     & code {
         font-family: 'Courier New', Courier, monospace;
@@ -116,15 +146,25 @@ export const MessageBubble = styled.div<isUser>`
         padding: 2px 4px;
         border-radius: 3px;
     }
+
+    @media (max-width: 768px) {
+        padding: 8px 12px; /* 모바일 말풍선 패딩 줄임 */
+
+        /* 모바일에선 폰트도 살짝 */
+        & p,
+        & li {
+            font-size: 0.95em;
+        }
+    }
 `;
-// ★ 5. 복사 버튼 스타일 추가
+
 export const CopyButton = styled.button`
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 5px;
-    margin-left: 5px; /* 말풍선과 간격 */
-    font-size: 1em; /* 아이콘 크기 */
+    margin-left: 5px;
+    font-size: 1em;
     color: #6c757d;
     opacity: 0.5;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -132,6 +172,11 @@ export const CopyButton = styled.button`
     &:hover {
         opacity: 1;
         transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+        font-size: 0.9em; /* 아이콘/텍스트 크기 살짝 줄임 */
+        padding: 3px;
     }
 `;
 
@@ -151,6 +196,11 @@ export const ChatInput = styled.input`
         border-color: #007bff;
         outline: none;
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    @media (max-width: 768px) {
+        padding: 10px 12px; /* 모바일 입력창 패딩 줄임 */
+        font-size: 0.95em;
     }
 `;
 
@@ -173,9 +223,14 @@ export const SendButton = styled.button`
         background-color: #a0cfff;
         cursor: not-allowed;
     }
+
+    @media (max-width: 768px) {
+        padding: 5px 5px; /* 모바일 버튼 패딩 줄임 */
+        font-size: 0.95em;
+    }
 `;
 
-// ★ 6. 로딩 애니메이션 (점 3개)
+// ... (bounceAnimation은 그대로) ...
 const bounceAnimation = keyframes`
   0%, 80%, 100% {
     transform: scale(0);
@@ -185,20 +240,22 @@ const bounceAnimation = keyframes`
   }
 `;
 
-// ★ 7. LoadingIndicator 스타일 수정 (텍스트 -> 애니메이션)
 export const LoadingIndicator = styled.div`
     display: flex;
     align-items: flex-start;
-    gap: 10px; /* 아바타랑 간격 */
-    padding: 5px 0; /* 위아래 약간 여유 */
+    gap: 10px;
+    padding: 5px 0;
 
     & > div {
-        /* 점들을 감싸는 컨테이너 */
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 40px; /* 말풍선 높이랑 비슷하게 */
+        height: 40px;
         padding: 0 10px;
+
+        @media (max-width: 768px) {
+            /* ★ 모바일 아바타가 40px로 줄어도, 말풍선 높이는 똑같이 40px로 유지되니까 여긴 안 고쳐도 됨 */
+        }
     }
 
     span {
