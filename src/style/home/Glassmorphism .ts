@@ -17,12 +17,13 @@ export const GlassCard = styled.div`
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 
     /* --- 모바일 최적화 추가 --- */
-    width: 100%;
-    box-sizing: border-box; // padding이 width에 포함되도록
+    width: 50%;
+    box-sizing: border-box;
 
     /* 480px 이하의 모바일 화면 대응 */
     @media (max-width: 480px) {
         padding: 16px; // 모바일에서는 내부 여백을 줄임
+        width: 100%;
     }
     /* --------------------- */
 `;

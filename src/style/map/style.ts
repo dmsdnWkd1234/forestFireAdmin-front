@@ -22,6 +22,27 @@ export const MapWrapper = styled.div`
     }
 `;
 
+export const TitleBar = styled.div`
+    width: 95%;
+    height: 10%;
+    background-color: #fff;
+    border-radius: 15px 15px 0px 0px;
+
+    @media (max-width: 768px) {
+        height: 20%;
+        margin-top: 15px;
+        display: none;
+    }
+`;
+
+export const TitleBarText = styled.div`
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-left: 20px;
+    width: fit-content;
+    line-height: 2.5;
+`;
+
 export const ContentBox = styled.div`
     background-color: #ffffff;
     padding: 24px 32px;

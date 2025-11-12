@@ -7,8 +7,8 @@ import Notice from './notice/Notice.tsx';
 import Chat from './chat/Chat.tsx';
 // import CreateNotice from './notice/CreateNotice.tsx';
 import Login from './login/LoginPage.tsx';
-import Sidebar from './sidebar/Sidebar.tsx'; // Sidebar 컴포넌트 import
-import Dashboard from './dashboard/dashboard.tsx';
+import Sidebar from './sidebar/Sidebar.tsx';
+import Dashboard from './dashboard/Dashboard.tsx';
 
 function App() {
     const isAuthenticated = () => localStorage.getItem('chad_auth') === 'true';

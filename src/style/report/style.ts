@@ -120,7 +120,7 @@ export const Pagination = styled.div`
 `;
 
 export const PageButton = styled.button<{ active: boolean }>`
-    background-color: ${({ active }) => (active ? '#007bff' : '#ecf0f1')};
+    background-color: ${({ active }) => (active ? '#007bff' : '#fff')};
     color: ${({ active }) => (active ? '#fff' : '#34495e')};
     border: 1px solid ${({ active }) => (active ? '#007bff' : '#bdc3c7')};
     padding: 10px 15px;

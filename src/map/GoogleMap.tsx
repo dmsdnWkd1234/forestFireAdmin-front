@@ -6,30 +6,9 @@ import useAllMeshPolling from './useAllMeshPolling'; // (신규) 전체 마커�
 import { meshAdressArray } from '../types/meshAdress';
 import * as S from '../style/map/style';
 import type { meshAdress } from '../types/meshAdress'; // (가상) 타입
-
-const EMOJI_MAP = {
-    기본: '📍',
-    온도: '🌡️',
-    습도: '💧',
-    이산화탄소: '💨',
-    배터리: '🔋',
-    기압: '📈',
-    TVOC: '🧪',
-    전압: '⚡',
-} as const; // as const로 타입을 명확히 함
+import { center, containerStyle, EMOJI_MAP } from './mapSettiong';
+// as const로 타입을 명확히 함
 type EmojiFilterKey = keyof typeof EMOJI_MAP;
-
-const containerStyle = {
-    width: '95%',
-    height: '700px',
-    marginTop: '15px',
-    borderRadius: '12px',
-};
-
-const center = {
-    lat: 37.6329,
-    lng: 127.0549,
-};
 
 const meshAdress: meshAdress[] = meshAdressArray;
 
@@ -40,8 +19,6 @@ const GoogleMapComponent: React.FC = () => {
     const { meshData: selectedMeshData, error: selectedMeshError } = useMeshPolling(
         selectedMesh?.unicast_address ?? null
     );
-    const TEMP_THRESHOLD = 40; // 40°C
-    const CO2_THRESHOLD = 1000; // 1000 ppm
 
     // 2. 전체 마커 필터용 (신규 훅 사용)
     const [activeFilter, setActiveFilter] = useState('기본');
@@ -128,14 +105,15 @@ const GoogleMapComponent: React.FC = () => {
         return options;
     }, [activeFilter, allData]); // 의존성 배열은 그대로
 
-    // ... (return JSX 부분은 수정할 필요 없습니다) ...
-
     return (
         <S.RootContainer>
             {/* 상태와 세터(setter)를 props로 전달 */}
             <MeshDataSelector activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
 
             <S.MapWrapper>
+                <S.TitleBar>
+                    <S.TitleBarText>Mesh Data Map</S.TitleBarText>
+                </S.TitleBar>
                 <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
                     <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={18}>
                         {meshAdress.map((mesh) => {
@@ -157,15 +135,9 @@ const GoogleMapComponent: React.FC = () => {
                         {/* InfoWindow 로직은 기존과 동일 (selectedMeshData, selectedMeshError 사용) */}
                         {selectedMesh && (
                             <InfoWindow
-                                // 1. [수정] position을 오프셋 없이 마커 위치와 동일하게 설정
                                 position={{ lat: selectedMesh.lat, lng: selectedMesh.lng }}
                                 onCloseClick={() => setSelectedMesh(null)}
-                                // 2. [추가] options prop을 사용하여 픽셀 오프셋 지정
                                 options={{
-                                    // InfoWindow의 앵커(꼬리표)를
-                                    // 마커 앵커(하단 중앙) 기준으로
-                                    // (가로 0px, 세로 -40px) 만큼 이동 (즉, 위로 40px)
-                                    // google 객체는 <LoadScript> 하위이므로 이 시점엔 로드되어 있습니다.
                                     pixelOffset:
                                         typeof google !== 'undefined' && google.maps
                                             ? new google.maps.Size(0, -40)
@@ -178,6 +150,7 @@ const GoogleMapComponent: React.FC = () => {
                                         <p>❌ 데이터 로딩 실패</p>
                                     ) : selectedMeshData ? ( // selectedMeshData 사용!
                                         <>
+                                            <p>🛰️UA: {selectedMeshData.unicast_address}</p>
                                             <p>🌡️ Temp: {selectedMeshData.Temp}°C</p>
                                             <p>💧 Humi: {selectedMeshData.Humidity}%</p>
                                             <p>💨 CO2: {selectedMeshData.CO2} ppm</p>

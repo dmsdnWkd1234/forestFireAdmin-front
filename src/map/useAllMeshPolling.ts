@@ -7,7 +7,7 @@ import type { MeshData } from '../types/mesh';
 // 반환 타입: Map<메쉬 주소(number), 메쉬 데이터(MeshData)>
 type AllDataMap = Map<number, MeshData>;
 
-const POLLING_INTERVAL = 5000; // 5초마다 모든 데이터 갱신
+const POLLING_INTERVAL = 15000; // 5초마다 모든 데이터 갱신
 
 export default function useAllMeshPolling() {
     // Map을 사용하여 <주소, 데이터>로 관리하는 것이 효율적입니다.
