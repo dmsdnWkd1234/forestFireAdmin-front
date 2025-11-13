@@ -76,7 +76,9 @@ export default function MeshStatus() {
     return (
         <S.Root>
             <S.ContentBox>
-                <S.Title>이슈</S.Title>
+                <S.Title>
+                    이슈 <span>{issues.length}개의 이슈가 있습니다</span>
+                </S.Title>
                 <S.ListBox>
                     {/* 6. 로딩 중일 때 */}
                     {isLoading && (

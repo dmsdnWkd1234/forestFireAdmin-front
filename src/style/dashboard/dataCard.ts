@@ -56,7 +56,6 @@ export const StatusBadge = styled.div`
     color: #28a745; /* 녹색 텍스트 */
     background-color: #e6f7ec; /* 연한 녹색 배경 */
     margin-right: 8px; /* 뱃지 사이 간격 */
-    margin-top: 15px;
 
     /* 마지막 뱃지는 오른쪽 마진을 없앰 */
     &:last-child {

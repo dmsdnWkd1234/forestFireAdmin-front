@@ -7,7 +7,7 @@ export const Root = styled.div`
     min-height: 100vh;
     display: flex;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f2f2f7;
+    background-color: #e8e8ed;
 
     /* --- 데스크탑 (기본) --- */
     flex-direction: row; // 가로 배치

@@ -18,17 +18,17 @@ export default function MyDashboardChart() {
 
     return (
         <S.RootContainerStyle>
-            <S.SectionRoot height="20%">
+            <S.SectionRoot height="25%">
                 <DataCard selectedMesh={selectedMesh}></DataCard>
             </S.SectionRoot>
-            <S.SectionRoot height="35%">
+            <S.SectionRoot height="30%">
                 <S.flex>
                     <MeshSelectorMap onMeshSelect={setSelectedMesh} selectedMesh={selectedMesh}></MeshSelectorMap>
                     <MeshStatus></MeshStatus>
                 </S.flex>
             </S.SectionRoot>
-            <S.SectionRoot height="50%">
-                <ChartBox></ChartBox>
+            <S.SectionRoot height="33%">
+                <ChartBox selectedMesh={selectedMesh}></ChartBox>
             </S.SectionRoot>
         </S.RootContainerStyle>
     );

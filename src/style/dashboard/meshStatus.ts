@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Root = styled.div`
     width: 580px;
-    height: 375px;
+    height: 300px;
     background-color: #fff;
     margin-left: 3%;
     border-radius: 12px;
@@ -21,6 +21,12 @@ export const Title = styled.div`
     display: flex;
     align-items: center;
     height: 10%; /* 타이틀 영역 높이 고정 */
+
+    & > span {
+        font-size: 0.9rem;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
 `;
 
 export const ListBox = styled.div`
