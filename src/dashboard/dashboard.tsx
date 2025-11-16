@@ -8,7 +8,6 @@ import MeshStatus from './MeshStatus';
 
 export default function MyDashboardChart() {
     // 2. 현재 선택된 데이터 유형을 state로 관리 (기본값: 'Temp')
-    const [selectedType, _] = useState<any>('Temp');
     const [selectedMesh, setSelectedMesh] = useState(null);
 
     // 3. 훅에 현재 선택된 state(selectedType)를 전달
