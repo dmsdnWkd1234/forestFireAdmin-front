@@ -4,6 +4,14 @@ export const Root = styled.div`
     width: 50%;
     height: 275px;
     margin-left: 1%;
+
+    /* 모바일 대응 */
+    @media (max-width: 768px) {
+        width: 100%; /* 화면 꽉 채우기 */
+        height: 300px; /* 모바일에선 지도를 좀 더 크게 */
+        margin-left: 0;
+        margin-top: 10px; /* DataCard와 간격 띄우기 */
+    }
 `;
 
 export const MapTitle = styled.div`

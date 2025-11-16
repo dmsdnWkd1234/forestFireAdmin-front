@@ -7,7 +7,15 @@ export const Root = styled.div`
     margin-top: 3%;
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 살짝 그림자 추가 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    /* 모바일 대응 */
+    @media (max-width: 768px) {
+        width: 100%; /* 화면 꽉 채우기 */
+        height: 350px; /* 높이 조절 */
+        margin-left: 0;
+        margin-top: 10px; /* 위 컴포넌트와 간격 */
+    }
 `;
 
 export const ChartBox = styled.div`
@@ -17,15 +25,19 @@ export const ChartBox = styled.div`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+
+    /* 모바일 대응 */
+    @media (max-width: 768px) {
+        padding: 15px 20px; /* 패딩 줄이기 */
+    }
 `;
 
-// 타이틀과 버튼을 가로로 배치하기 위한 헤더
 export const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 15%;
-    position: relative; /* 드롭다운 메뉴의 기준점 */
+    position: relative;
     margin-bottom: 10px;
 `;
 
@@ -33,9 +45,13 @@ export const Title = styled.div`
     font-weight: 600;
     font-size: 1.5rem;
     color: #333;
+
+    /* 모바일 대응 */
+    @media (max-width: 768px) {
+        font-size: 1.2rem; /* 폰트 줄이기 */
+    }
 `;
 
-// + 버튼 스타일
 export const SelectButton = styled.button`
     width: 32px;
     height: 32px;
@@ -56,7 +72,6 @@ export const SelectButton = styled.button`
     }
 `;
 
-// 드롭다운 메뉴 박스
 export const OptionList = styled.div`
     position: absolute;
     top: 40px;
@@ -70,7 +85,6 @@ export const OptionList = styled.div`
     width: 120px;
 `;
 
-// 드롭다운 메뉴 아이템
 export const OptionItem = styled.div`
     padding: 10px 15px;
     font-size: 0.9rem;
@@ -79,13 +93,12 @@ export const OptionItem = styled.div`
 
     &:hover {
         background-color: #f8f9fa;
-        color: #28a745; /* 선택 시 녹색 포인트 */
+        color: #28a745;
     }
 `;
 
-// 차트가 들어갈 영역 (나머지 높이 꽉 채움)
 export const ChartArea = styled.div`
     flex: 1;
     width: 100%;
-    min-height: 0; /* flex 자식의 overflow 방지 */
+    min-height: 0;
 `;
