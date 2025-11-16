@@ -46,7 +46,7 @@ export default function MeshStatus() {
 
     // 4. 컴포넌트 마운트 시 API 호출
     useEffect(() => {
-        fetch('http://localhost:3002/api/dashboard/abnormal') // 백엔드에서 만든 API 엔드포인트
+        fetch(`${import.meta.env.VITE_BACK_URL}api/dashboard/abnormal`) // 백엔드에서 만든 API 엔드포인트
             .then((res) => res.json())
             .then((abnormalData) => {
                 // 5. 받아온 데이터를 "가공"

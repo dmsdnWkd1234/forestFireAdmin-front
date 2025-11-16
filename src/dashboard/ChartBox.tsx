@@ -25,7 +25,7 @@ export default function ChartBox({ selectedMesh }: { selectedMesh: any }) {
         }
 
         // 선택된 메시의 ID(unicast_address)로 데이터 요청
-        fetch(`http://localhost:3002/api/dashboard`, {
+        fetch(`${import.meta.env.VITE_BACK_URL}api/dashboard`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: selectedMesh.unicast_address }),

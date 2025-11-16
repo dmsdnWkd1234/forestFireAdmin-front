@@ -13,7 +13,7 @@ export default function DataCard({ selectedMesh }: { selectedMesh: any }) {
             // API는 'id' 키로 unicast_address를 받도록 되어 있었습니다.
             const addressToFetch = selectedMesh.unicast_address;
 
-            fetch(`http://localhost:3002/api/dashboard`, {
+            fetch(`${import.meta.env.VITE_BACK_URL}api/dashboard`, {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
