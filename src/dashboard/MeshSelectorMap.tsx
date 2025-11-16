@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import { getEmojiMarkerIcon } from './useEncodingEmoji';
 
 export default function MeshSelectorMap({ selectedMesh, onMeshSelect }: { selectedMesh: any; onMeshSelect: any }) {
-    const [position, setPosition] = useState<any>({ id: 0, name: '', unicast_address: 0, lat: 0, lng: 0 });
+    const [_, setPosition] = useState<any>({ id: 0, name: '', unicast_address: 0, lat: 0, lng: 0 });
     const emojiMarkerIcon = useMemo(() => {
         return getEmojiMarkerIcon();
     }, []);
