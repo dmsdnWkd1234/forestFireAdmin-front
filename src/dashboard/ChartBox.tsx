@@ -35,7 +35,7 @@ export default function ChartBox({ selectedMesh }: { selectedMesh: any }) {
                 if (!data || data.length === 0) return;
 
                 // 최신순 데이터를 시간순(과거->현재)으로 뒤집고 포맷팅
-                const formattedData = [...data].reverse().map((item) => ({
+                const formattedData: any = [...data].reverse().map((item) => ({
                     ...item,
                     // X축 시간 표시 (예: 14:30)
                     displayTime: new Date(item.Time).toLocaleTimeString('ko-KR', {
