@@ -116,11 +116,7 @@ export default function FireLive() {
                             <S.DetectionCard key={item.id} style={{ display: item.isVisible ? 'block' : 'none' }}>
                                 <S.CardImageWrapper>
                                     <S.StatusBadge>화재 감지</S.StatusBadge>
-                                    <img
-                                        src={item.imgUrl}
-                                        alt={`Fire detection ${item.id}`}
-                                        onError={(e: any) => handleImageError(item.id)}
-                                    />
+                                    <img src={item.imgUrl} alt={`Fire detection ${item.id}`} />
                                 </S.CardImageWrapper>
                                 <S.CardHeader>
                                     <S.InfoRow>
