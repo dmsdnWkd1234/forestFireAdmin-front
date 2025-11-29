@@ -158,7 +158,7 @@ const GoogleMapComponent: React.FC = () => {
                                             <p>📈 Pressure: {selectedMeshData.Pressure} hPa</p>
                                             <p>🔋 Battery: {selectedMeshData.Battery_Persent}%</p>
                                             <p>⚡ Voltage: {selectedMeshData.Voltage} V</p>
-                                            <p>🕒 Time: {new Date(selectedMeshData.Time).toLocaleString()}</p>
+                                            <p>🕒 Time: {selectedMeshData.Time.split('.')[0].replace('T', ' ')}</p>
                                         </>
                                     ) : (
                                         <p>⏳ 로딩 중...</p>

@@ -7,7 +7,8 @@ import Notice from './notice/Notice.tsx';
 import Chat from './chat/Chat.tsx';
 import Login from './login/LoginPage.tsx';
 import Sidebar from './sidebar/Sidebar.tsx';
-import Dashboard from './dashboard/dashboard.tsx';
+import Dashboard from './dashboard/Dashboard.tsx';
+import FireLive from './fireLive/FireLive.tsx';
 
 function App() {
     const isAuthenticated = () => localStorage.getItem('chad_auth') === 'true';
@@ -27,6 +28,7 @@ function App() {
                                 <Route path="/notice" element={<Notice />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/ai" element={<Chat />} />
+                                <Route path="/fireLive" element={<FireLive></FireLive>} />
                                 <Route path="*" element={<Navigate to="/home" replace />} />
                             </Routes>
                         </main>

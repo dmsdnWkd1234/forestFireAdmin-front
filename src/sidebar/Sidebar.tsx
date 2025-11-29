@@ -4,14 +4,7 @@ import { LuSiren } from 'react-icons/lu';
 import { BsChatLeftText } from 'react-icons/bs';
 import { BiBroadcast } from 'react-icons/bi';
 import { RiRobot3Line } from 'react-icons/ri';
-import { FaFlask } from 'react-icons/fa';
-
-// const menuItems = [
-//     { path: '/home', icon: <GoHome />, name: '홈' },
-//     { path: '/map', icon: <BiBroadcast />, name: '메쉬' },
-//     { path: '/report', icon: <LuSiren />, name: '신고' },
-//     { path: '/notice', icon: <BsChatLeftText />, name: '공지' },
-// ];
+import { FaFire } from 'react-icons/fa';
 
 function Sidebar() {
     return (
@@ -44,6 +37,13 @@ function Sidebar() {
                     <BsChatLeftText />
                 </S.MenuIcon>
                 <S.MenuText>공지</S.MenuText>
+            </S.StyledNavLink>
+
+            <S.StyledNavLink to="/fireLive">
+                <S.MenuIcon>
+                    <FaFire />
+                    <S.MenuText>실시간 감지</S.MenuText>
+                </S.MenuIcon>
             </S.StyledNavLink>
 
             <S.StyledNavLink to="/dashboard">

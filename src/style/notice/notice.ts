@@ -5,7 +5,8 @@ interface ListIdProps {
 }
 
 export const root = styled.div`
-    width: 100%;
+    width: 97%;
+    border-radius: 15px;
     padding: 40px;
     display: flex;
     justify-content: center;

@@ -102,3 +102,30 @@ export const ChartArea = styled.div`
     width: 100%;
     min-height: 0;
 `;
+
+// 기존 ChartBox 스타일 파일 하단에 추가해주세요
+
+export const ButtonGroup = styled.div`
+    display: flex;
+    background-color: #f1f3f5;
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+`;
+
+export const RangeButton = styled.button<{ $isActive: boolean }>`
+    border: none;
+    background-color: ${(props) => (props.$isActive ? '#fff' : 'transparent')};
+    color: ${(props) => (props.$isActive ? '#007bff' : '#868e96')};
+    font-weight: ${(props) => (props.$isActive ? '700' : '500')};
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: ${(props) => (props.$isActive ? '0 1px 2px rgba(0,0,0,0.1)' : 'none')};
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: #333;
+    }
+`;

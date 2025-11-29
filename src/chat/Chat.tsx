@@ -6,7 +6,7 @@ function Chat() {
     // ★ 백엔드 API 호출 로직
     const callChatbotApi = async (message: string, history: []) => {
         try {
-            const response = await fetch('http://localhost:3002/api/postToAi', {
+            const response = await fetch(`${import.meta.env.VITE_BACK_URL}api/postToAi`, {
                 // 네 백엔드 주소
                 method: 'POST',
                 headers: {

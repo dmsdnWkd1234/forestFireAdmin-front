@@ -1,34 +1,24 @@
 import { useEffect, useState } from 'react';
 import * as S from '../style/dashboard/dataCard';
 
-// 1. 부모로부터 selectedMesh를 prop으로 받습니다.
 export default function DataCard({ selectedMesh }: { selectedMesh: any }) {
-    // 2. API로부터 받아온 최신 데이터를 저장할 state
     const [latestData, setLatestData] = useState<any>(null);
 
-    // 3. selectedMesh prop이 변경될 때마다 이 Effect가 실행됩니다.
     useEffect(() => {
-        // 4. selectedMesh가 null이 아니면(즉, 마커가 선택되면) 데이터 fetch
         if (selectedMesh) {
-            // API는 'id' 키로 unicast_address를 받도록 되어 있었습니다.
             const addressToFetch = selectedMesh.unicast_address;
 
             fetch(`${import.meta.env.VITE_BACK_URL}api/dashboard`, {
                 method: 'post',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: addressToFetch, // { "id": 16 }
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: addressToFetch }),
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    // 5. API가 100개짜리 배열을 반환하므로, 가장 최신 데이터(첫 번째)를 사용
                     if (data && data.length > 0) {
                         setLatestData(data[0]);
                     } else {
-                        setLatestData(null); // 데이터가 없는 경우
+                        setLatestData(null);
                     }
                 })
                 .catch((err) => {
@@ -36,25 +26,66 @@ export default function DataCard({ selectedMesh }: { selectedMesh: any }) {
                     setLatestData(null);
                 });
         } else {
-            // 6. 선택이 해제되면(selectedMesh가 null이면) 데이터를 비웁니다.
             setLatestData(null);
         }
-    }, [selectedMesh]); // 의존성 배열: selectedMesh가 바뀔 때만 실행
+    }, [selectedMesh]);
 
-    // 7. 렌더링: latestData가 있으면 그 값을, 없으면 '...' (로딩) 표시
+    // --- 상태 판단 로직 함수들 ---
+
+    // 1. 온도 상태 (임의 기준: 35도 이상 주의, 50도 이상 위험)
+    const getTempStatus = (temp: number) => {
+        if (temp == null) return { text: '...', color: '#ccc' };
+        if (temp >= 50) return { text: '위험', color: '#FF4D4F' }; // 빨강
+        if (temp >= 35) return { text: '주의', color: '#FAAD14' }; // 주황
+        return { text: '양호', color: '#52C41A' }; // 초록
+    };
+
+    // 2. 습도 상태 (임의 기준: 40% 이하 주의, 20% 이하 위험)
+    const getHumidStatus = (humid: number) => {
+        if (humid == null) return { text: '...', color: '#ccc' };
+        // 습도는 낮을수록 산불 위험이 높음
+        if (humid <= 20) return { text: '위험', color: '#FF4D4F' };
+        if (humid <= 40) return { text: '주의', color: '#FAAD14' };
+        return { text: '양호', color: '#52C41A' };
+    };
+
+    // 3. 배터리 상태 (임의 기준: 20% 이하 주의, 10% 이하 위험)
+    const getBatteryStatus = (battery: number) => {
+        if (battery == null) return { text: '...', color: '#ccc' };
+        if (battery <= 10) return { text: '위험', color: '#FF4D4F' };
+        if (battery <= 20) return { text: '주의', color: '#FAAD14' };
+        return { text: '양호', color: '#52C41A' };
+    };
+
+    // 4. 신고 상태 (1개라도 있으면 접수)
+    const getEmergencyStatus = (count: number) => {
+        if (count == null) return { text: '...', color: '#ccc' };
+        if (count > 0) return { text: '신고 접수', color: '#FF4D4F' }; // 빨강
+        return { text: '양호', color: '#52C41A' }; // 초록
+    };
+
+    // 현재 데이터 기준으로 상태 값 계산
+    const tempStatus = getTempStatus(latestData?.Temp);
+    const humidStatus = getHumidStatus(latestData?.Humidity);
+    const batteryStatus = getBatteryStatus(latestData?.Battery_Persent);
+    const emergencyStatus = getEmergencyStatus(latestData?.Emergency);
+
     return (
         <S.Root>
+            {/* 온도 카드 */}
             <S.CardRoot>
                 <S.CardTitle>온도</S.CardTitle>
                 <S.CardData>
-                    {/* API 응답의 Temp 키를 사용. (DB 컬럼명 기준) */}
                     <span>{latestData ? latestData.Temp : '...'}</span>
                     <span>°C</span>
                 </S.CardData>
                 <S.CardStatus>
-                    <S.StatusBadge>양호</S.StatusBadge>
+                    {/* style 속성으로 배경색을 직접 지정합니다 */}
+                    <S.StatusBadge style={{ backgroundColor: tempStatus.color }}>{tempStatus.text}</S.StatusBadge>
                 </S.CardStatus>
             </S.CardRoot>
+
+            {/* 습도 카드 */}
             <S.CardRoot>
                 <S.CardTitle>습도</S.CardTitle>
                 <S.CardData>
@@ -62,29 +93,33 @@ export default function DataCard({ selectedMesh }: { selectedMesh: any }) {
                     <span>%</span>
                 </S.CardData>
                 <S.CardStatus>
-                    <S.StatusBadge>양호</S.StatusBadge>
+                    <S.StatusBadge style={{ backgroundColor: humidStatus.color }}>{humidStatus.text}</S.StatusBadge>
                 </S.CardStatus>
             </S.CardRoot>
+
+            {/* 배터리 카드 */}
             <S.CardRoot>
                 <S.CardTitle>배터리 잔량</S.CardTitle>
                 <S.CardData>
-                    {/* API 응답의 Battery_Persent 키를 사용. */}
                     <span>{latestData ? latestData.Battery_Persent : '...'}</span>
                     <span>%</span>
                 </S.CardData>
                 <S.CardStatus>
-                    <S.StatusBadge>양호</S.StatusBadge>
+                    <S.StatusBadge style={{ backgroundColor: batteryStatus.color }}>{batteryStatus.text}</S.StatusBadge>
                 </S.CardStatus>
             </S.CardRoot>
+
+            {/* 신고 카드 */}
             <S.CardRoot>
                 <S.CardTitle>신고</S.CardTitle>
                 <S.CardData>
-                    {/* API 응답의 Emergency 키를 사용. */}
                     <span>{latestData ? latestData.Emergency : '...'}</span>
                     <span>개</span>
                 </S.CardData>
                 <S.CardStatus>
-                    <S.StatusBadge>양호</S.StatusBadge>
+                    <S.StatusBadge style={{ backgroundColor: emergencyStatus.color }}>
+                        {emergencyStatus.text}
+                    </S.StatusBadge>
                 </S.CardStatus>
             </S.CardRoot>
         </S.Root>

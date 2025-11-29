@@ -17,7 +17,7 @@ export const GlassCard = styled.div`
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 
     /* --- 모바일 최적화 추가 --- */
-    width: 50%;
+    width: 100%;
     box-sizing: border-box;
 
     /* 480px 이하의 모바일 화면 대응 */
