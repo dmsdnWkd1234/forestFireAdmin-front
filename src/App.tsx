@@ -8,7 +8,7 @@ import Chat from './chat/Chat.tsx';
 import Login from './login/LoginPage.tsx';
 import Sidebar from './sidebar/Sidebar.tsx';
 import FireLive from './fireLive/FireLive.tsx';
-import Dashboard from './dashboard/Dashboard.tsx';
+import Dashboard from './dashboard/dashboard.tsx';
 
 function App() {
     const isAuthenticated = () => localStorage.getItem('chad_auth') === 'true';
