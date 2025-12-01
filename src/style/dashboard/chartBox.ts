@@ -53,9 +53,15 @@ export const Title = styled.div`
 `;
 
 export const SelectButton = styled.button`
-    width: 42px;
+    min-width: 42px; /* 대신 최소 너비만 잡아 */
     height: 42px;
-    border-radius: 50%;
+
+    /* 글씨가 길어지면 옆으로 늘어나게 여백을 줘 */
+    padding: 0 16px;
+
+    /* 높이(42px)의 절반을 주면 둥근 캡슐 모양이 돼 */
+    border-radius: 21px;
+
     border: none;
     background-color: #f0f0f0;
     color: #555;
@@ -66,6 +72,9 @@ export const SelectButton = styled.button`
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+
+    /* 글씨가 두 줄로 깨지는 걸 막아줘 */
+    white-space: nowrap;
 
     &:hover {
         background-color: #e0e0e0;
