@@ -11,7 +11,7 @@ export default function HomeReporteSection() {
         fetch(`${import.meta.env.VITE_BACK_URL}api/report`)
             // fetch(dev_mode + 'api/report')
             .then((res) => res.json())
-            .then((data) => setReports(data.reverse().slice(0, 3))) // 최신 3개만 표시
+            .then((data) => setReports(data.slice(0, 3))) // 최신 3개만 표시
             .catch((err) => console.error('신고 내역 불러오기 실패:', err));
     }, []);
 
@@ -28,14 +28,9 @@ export default function HomeReporteSection() {
                                 <S.Field>
                                     <strong>신고 번호:</strong> {report.id}
                                 </S.Field>
+
                                 <S.Field>
-                                    <strong>메쉬 번호:</strong> {report.mesh_id}
-                                </S.Field>
-                                <S.Field>
-                                    <strong>유형:</strong> {report.type}
-                                </S.Field>
-                                <S.Field>
-                                    <strong>일시:</strong> {new Date(report.created_at).toLocaleString()}
+                                    <strong>일시:</strong> {report.Time.split('.')[0].replace('T', ' ')}
                                 </S.Field>
                             </Link>
                         </S.Card>
