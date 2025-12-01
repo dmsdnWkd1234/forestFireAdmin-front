@@ -120,19 +120,22 @@ export const Pagination = styled.div`
 `;
 
 export const PageButton = styled.button<{ active: boolean }>`
+    /* active가 true면 파란색, false면 흰색 */
     background-color: ${({ active }) => (active ? '#007bff' : '#fff')};
     color: ${({ active }) => (active ? '#fff' : '#34495e')};
     border: 1px solid ${({ active }) => (active ? '#007bff' : '#bdc3c7')};
+
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9em;
     transition: all 0.3s ease;
-    min-width: 40px; /* 버튼 최소 너비 */
+    min-width: 40px;
 
     &:hover {
-        background-color: ${({ active }) => (active ? '#007bff' : '#dcdfe1')};
-        border-color: ${({ active }) => (active ? '#007bff' : '#aeb7bd')};
+        /* hover 색상도 active 상태에 따라 다르게 */
+        background-color: ${({ active }) => (active ? '#0056b3' : '#dcdfe1')};
+        border-color: ${({ active }) => (active ? '#0056b3' : '#aeb7bd')};
         transform: translateY(-1px);
     }
     &:disabled {
