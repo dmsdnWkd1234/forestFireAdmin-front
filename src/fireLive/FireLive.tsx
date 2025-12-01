@@ -7,8 +7,7 @@ export default function FireLive() {
 
     // 데이터 설정
     const totalDataCount: any = 60;
-    const itemsPerPage: any = 8; // 화면이 좁아졌으므로 한 페이지에 8개 정도가 적당함
-
+    const itemsPerPage: any = 8;
     const totalPages: any = Math.ceil(totalDataCount / itemsPerPage);
 
     useEffect(() => {
@@ -21,11 +20,9 @@ export default function FireLive() {
                     const currentId: any = startIdx + i;
                     if (currentId >= totalDataCount) return null;
 
-                    // 가짜 시간 로직
                     const hour = 14 + Math.floor(currentId / 60);
                     const minute = currentId % 60;
                     const second = Math.floor(Math.random() * 60);
-
                     const formatMin = String(minute).padStart(2, '0');
                     const formatSec = String(second).padStart(2, '0');
                     const fakeTime = `${todayStr} ${hour}:${formatMin}:${formatSec}`;
@@ -47,33 +44,45 @@ export default function FireLive() {
     }, [page]);
 
     const handlePageChange = (newPage: any) => {
-        setPage(newPage);
-        // 스크롤을 맨 위가 아니라 리스트 상단으로 올리는 게 좋음 (비디오는 고정이니까)
-        // 여기선 간단히 둡니다.
+        if (newPage >= 1 && newPage <= totalPages) {
+            setPage(newPage);
+        }
     };
 
-    const handleImageError = (id: any) => {
-        setDetections((prev: any[]) =>
-            prev.map((item: any) => (item.id === id ? { ...item, isVisible: false } : item))
-        );
+    // [NEW] 페이지 번호 계산 로직 (최대 5개만 표시)
+    const getPageNumbers = () => {
+        const maxButtons = 5; // 모바일 배려: 한 번에 5개까지만 표시
+        let start = Math.max(1, page - 2);
+        let end = Math.min(totalPages, page + 2);
+
+        // 시작이나 끝 부분 처리 (항상 5개 유지 노력)
+        if (page < 3) {
+            end = Math.min(totalPages, 5);
+        }
+        if (page > totalPages - 2) {
+            start = Math.max(1, totalPages - 4);
+        }
+
+        const pages = [];
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+        return pages;
     };
 
     return (
         <S.Root>
-            {/* [NEW] 좌우 레이아웃 컨테이너 */}
             <S.LayoutContainer>
-                {/* 1. 왼쪽: 실시간 CCTV 영상 */}
+                {/* 왼쪽: 비디오 섹션 (기존 동일) */}
                 <S.VideoSection>
                     <S.VideoHeader>
                         <h2>LIVE 모니터링</h2>
                         <span style={{ fontSize: '12px', color: '#888' }}>mesh-01</span>
                     </S.VideoHeader>
                     <S.VideoWrapper>
-                        {/* video_feed는 보통 img 태그로 받아옵니다 (MJPEG) */}
                         <img
                             src="https://cam.duckpict.com/video_feed"
                             alt="Live Camera Feed"
-                            // 영상 로드 실패 시 스타일 처리
                             onError={(e: any) => {
                                 e.target.style.display = 'none';
                                 e.target.parentElement.style.backgroundColor = '#000';
@@ -81,7 +90,6 @@ export default function FireLive() {
                                     '<div style="color:white; display:flex; justify-content:center; align-items:center; height:100%;">신호 없음 (No Signal)</div>';
                             }}
                         />
-                        {/* 좌측 상단 REC 표시 */}
                         <div
                             style={{
                                 position: 'absolute',
@@ -104,7 +112,7 @@ export default function FireLive() {
                     </S.VideoWrapper>
                 </S.VideoSection>
 
-                {/* 2. 오른쪽: 감지 리스트 (기존 코드) */}
+                {/* 오른쪽: 리스트 섹션 */}
                 <S.showNoticeListRootBox>
                     <S.ListPageHeader>
                         <h1>감지 로그</h1>
@@ -132,8 +140,15 @@ export default function FireLive() {
                         ))}
                     </S.GridContainer>
 
+                    {/* [NEW] 페이지네이션 UI 개선 */}
                     <S.PaginationContainer>
-                        {Array.from({ length: totalPages }, (_: any, i: any) => i + 1).map((pageNum: any) => (
+                        {/* 이전 버튼 */}
+                        <S.PageButton onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
+                            &lt;
+                        </S.PageButton>
+
+                        {/* 계산된 페이지 번호만 표시 */}
+                        {getPageNumbers().map((pageNum: any) => (
                             <S.PageButton
                                 key={pageNum}
                                 $isActive={page === pageNum}
@@ -142,6 +157,11 @@ export default function FireLive() {
                                 {pageNum}
                             </S.PageButton>
                         ))}
+
+                        {/* 다음 버튼 */}
+                        <S.PageButton onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
+                            &gt;
+                        </S.PageButton>
                     </S.PaginationContainer>
                 </S.showNoticeListRootBox>
             </S.LayoutContainer>
