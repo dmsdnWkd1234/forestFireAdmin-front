@@ -6,7 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const DATA_TYPES = [
     { key: 'Temp', label: '온도 (°C)', color: '#ff7300' },
     { key: 'Humidity', label: '습도 (%)', color: '#387908' },
-    { key: 'Battery_percent', label: '배터리 (%)', color: '#8884d8' },
+    { key: 'Battery_Percent', label: '배터리 (%)', color: '#8884d8' },
     { key: 'CO2', label: 'CO2 (ppm)', color: '#82ca9d' },
     { key: 'TVOC', label: 'TVOC (ppb)', color: '#ffc658' },
 ];
