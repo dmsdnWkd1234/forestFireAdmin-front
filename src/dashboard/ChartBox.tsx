@@ -4,9 +4,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 // 선택 가능한 데이터 타입 정의
 const DATA_TYPES = [
-    { key: 'Temp', label: '온도 (°C)', color: '#ff7300' },
-    { key: 'Humidity', label: '습도 (%)', color: '#387908' },
-    { key: 'Battery_Persent', label: '배터리 (%)', color: '#8884d8' },
+    { key: '온도', label: '온도 (°C)', color: '#ff7300' },
+    { key: '습도', label: '습도 (%)', color: '#387908' },
+    { key: 'bat', label: '배터리 (%)', color: '#8884d8' },
     { key: 'CO2', label: 'CO2 (ppm)', color: '#82ca9d' },
     { key: 'TVOC', label: 'TVOC (ppb)', color: '#ffc658' },
 ];

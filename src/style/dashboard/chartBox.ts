@@ -53,13 +53,14 @@ export const Title = styled.div`
 `;
 
 export const SelectButton = styled.button`
-    width: 32px;
-    height: 32px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     border: none;
     background-color: #f0f0f0;
     color: #555;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
