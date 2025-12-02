@@ -20,9 +20,11 @@ export default function FireLive() {
                     const currentId: any = startIdx + i;
                     if (currentId >= totalDataCount) return null;
 
+                    // 가짜 시간 로직
                     const hour = 14 + Math.floor(currentId / 60);
                     const minute = currentId % 60;
                     const second = Math.floor(Math.random() * 60);
+
                     const formatMin = String(minute).padStart(2, '0');
                     const formatSec = String(second).padStart(2, '0');
                     const fakeTime = `${todayStr} ${hour}:${formatMin}:${formatSec}`;
@@ -32,7 +34,7 @@ export default function FireLive() {
                         reportNo: currentId,
                         time: fakeTime,
                         imgUrl: `https://cam.duckpict.com/static/0-${currentId}.jpg`,
-                        isVisible: true,
+                        isVisible: true, // 기본값은 보임 설정
                     };
                 })
                 .filter((item: any) => item !== null);
@@ -51,11 +53,10 @@ export default function FireLive() {
 
     // [NEW] 페이지 번호 계산 로직 (최대 5개만 표시)
     const getPageNumbers = () => {
-        const maxButtons = 5; // 모바일 배려: 한 번에 5개까지만 표시
+        const maxButtons = 5;
         let start = Math.max(1, page - 2);
         let end = Math.min(totalPages, page + 2);
 
-        // 시작이나 끝 부분 처리 (항상 5개 유지 노력)
         if (page < 3) {
             end = Math.min(totalPages, 5);
         }
@@ -70,10 +71,17 @@ export default function FireLive() {
         return pages;
     };
 
+    // [핵심] 이미지가 404면 호출되는 함수
+    const handleImageError = (id: any) => {
+        setDetections((prev: any[]) =>
+            prev.map((item: any) => (item.id === id ? { ...item, isVisible: false } : item))
+        );
+    };
+
     return (
         <S.Root>
             <S.LayoutContainer>
-                {/* 왼쪽: 비디오 섹션 (기존 동일) */}
+                {/* 왼쪽: 실시간 CCTV 영상 */}
                 <S.VideoSection>
                     <S.VideoHeader>
                         <h2>LIVE 모니터링</h2>
@@ -112,7 +120,7 @@ export default function FireLive() {
                     </S.VideoWrapper>
                 </S.VideoSection>
 
-                {/* 오른쪽: 리스트 섹션 */}
+                {/* 오른쪽: 감지 리스트 */}
                 <S.showNoticeListRootBox>
                     <S.ListPageHeader>
                         <h1>감지 로그</h1>
@@ -121,10 +129,19 @@ export default function FireLive() {
 
                     <S.GridContainer>
                         {detections.map((item: any) => (
-                            <S.DetectionCard key={item.id} style={{ display: item.isVisible ? 'block' : 'none' }}>
+                            <S.DetectionCard
+                                key={item.id}
+                                // isVisible이 false면 display: none 처리되어 화면에서 사라짐
+                                style={{ display: item.isVisible ? 'flex' : 'none' }}
+                            >
                                 <S.CardImageWrapper>
                                     <S.StatusBadge>화재 감지</S.StatusBadge>
-                                    <img src={item.imgUrl} alt={`Fire detection ${item.id}`} />
+                                    <img
+                                        src={item.imgUrl}
+                                        alt={`Fire detection ${item.id}`}
+                                        // [수정됨] 여기서 에러 발생 시 handleImageError 호출
+                                        onError={() => handleImageError(item.id)}
+                                    />
                                 </S.CardImageWrapper>
                                 <S.CardHeader>
                                     <S.InfoRow>
@@ -140,14 +157,12 @@ export default function FireLive() {
                         ))}
                     </S.GridContainer>
 
-                    {/* [NEW] 페이지네이션 UI 개선 */}
+                    {/* 페이지네이션 */}
                     <S.PaginationContainer>
-                        {/* 이전 버튼 */}
                         <S.PageButton onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
                             &lt;
                         </S.PageButton>
 
-                        {/* 계산된 페이지 번호만 표시 */}
                         {getPageNumbers().map((pageNum: any) => (
                             <S.PageButton
                                 key={pageNum}
@@ -158,7 +173,6 @@ export default function FireLive() {
                             </S.PageButton>
                         ))}
 
-                        {/* 다음 버튼 */}
                         <S.PageButton onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
                             &gt;
                         </S.PageButton>

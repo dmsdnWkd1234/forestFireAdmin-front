@@ -5,39 +5,35 @@ import useMeshPolling from './useMeshPolling'; // (기존) InfoWindow용
 import useAllMeshPolling from './useAllMeshPolling'; // (신규) 전체 마커용
 import { meshAdressArray } from '../types/meshAdress';
 import * as S from '../style/map/style';
-import type { meshAdress } from '../types/meshAdress'; // (가상) 타입
+import type { meshAdress } from '../types/meshAdress';
 import { center, containerStyle, EMOJI_MAP } from './mapSettiong';
+
 // as const로 타입을 명확히 함
 type EmojiFilterKey = keyof typeof EMOJI_MAP;
 
 const meshAdress: meshAdress[] = meshAdressArray;
 
 const GoogleMapComponent: React.FC = () => {
-    // 1. InfoWindow용 (기존 훅 사용)
+    // 1. InfoWindow용 (선택된 마커 polling)
     const [selectedMesh, setSelectedMesh] = useState<meshAdress | null>(null);
-    // 변수명 충돌 방지: meshData -> selectedMeshData
     const { meshData: selectedMeshData, error: selectedMeshError } = useMeshPolling(
         selectedMesh?.unicast_address ?? null
     );
 
-    // 2. 전체 마커 필터용 (신규 훅 사용)
+    // 2. 전체 마커 필터용 (전체 데이터 polling)
     const [activeFilter, setActiveFilter] = useState('기본');
-    const { allData, error: allDataError } = useAllMeshPolling();
+    const { allData } = useAllMeshPolling(); // error 처리는 필요시 추가
 
-    // 3. 마커 옵션 동적 생성 (useMemo로 최적화)
-    // ... (GoogleMapComponent 함수 내부) ...
-
+    // 3. 마커 옵션 동적 생성
     const markerOptions = useMemo(() => {
         const options = new Map<number, { icon?: google.maps.Icon; label?: google.maps.MarkerLabel }>();
 
-        // ▼▼▼ [수정됨] ▼▼▼
-        // 1. 'google' 객체가 로드되지 않았거나 '전체'가 선택되면 즉시 기본값 반환
+        // '전체' 모드이거나 google 객체가 없으면 기본 마커 사용
         if (typeof google === 'undefined' || !google.maps || activeFilter === '전체') {
             return options;
         }
 
-        // 2. [여기부터] 'google' 객체가 안전하게 보장된 영역입니다.
-        // 아이콘 생성 함수를 useMemo *내부*로 이동
+        // [함수 1] 이모지 아이콘 생성기
         const createEmojiIcon = (emoji: string): google.maps.Icon => {
             const svg = `
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
@@ -55,18 +51,47 @@ const GoogleMapComponent: React.FC = () => {
             };
         };
 
-        // 3. 현재 필터에 맞는 아이콘 객체 생성
+        // [함수 2] CCTV 아이콘 생성기 (24번 전용)
+        const createCCTVIcon = (): google.maps.Icon => {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="#d32f2f">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                </svg>
+            `;
+            return {
+                url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+                scaledSize: new google.maps.Size(40, 40),
+                anchor: new google.maps.Point(20, 20),
+                labelOrigin: new google.maps.Point(20, 40), // 라벨을 아이콘 아래로 내림
+            };
+        };
+
+        // 현재 필터에 맞는 기본 아이콘 생성
         const currentEmoji = EMOJI_MAP[activeFilter as EmojiFilterKey];
         const currentIcon = currentEmoji ? createEmojiIcon(currentEmoji) : undefined;
-        // ▲▲▲ [수정 완료] ▲▲▲
+
+        // CCTV 아이콘 생성
+        const cctvIcon = createCCTVIcon();
 
         for (const mesh of meshAdress) {
             const data = allData.get(mesh.unicast_address);
-            let icon: google.maps.Icon | undefined = currentIcon; // 미리 만든 아이콘 적용
+
+            // 1. 아이콘 결정 로직
+            let icon: google.maps.Icon | undefined;
+
+            if (mesh.unicast_address === 24) {
+                // 24번은 무조건 CCTV 아이콘
+                icon = cctvIcon;
+            } else {
+                // 나머지는 필터에 따른 이모지 아이콘
+                icon = currentIcon;
+            }
+
+            // 2. 라벨 결정 로직
             let label: google.maps.MarkerLabel | undefined = undefined;
 
             if (data) {
-                // 라벨(값)만 설정
                 switch (activeFilter) {
                     case '기본':
                         label = { text: `${mesh.name}`, className: 'marker-label' };
@@ -93,21 +118,27 @@ const GoogleMapComponent: React.FC = () => {
                         label = { text: `${data.Voltage}V`, className: 'marker-label' };
                         break;
                     default:
-                        icon = undefined; // '전체'는 이미 위에서 처리됨
+                        // 필터가 특수 모드가 아닐 때, 24번이 아니면 아이콘/라벨 숨김 (undefined)
+                        if (mesh.unicast_address !== 24) {
+                            icon = undefined;
+                        }
                         label = undefined;
                 }
             } else {
-                // 데이터가 없는 메쉬는 기본 아이콘 사용
-                icon = undefined;
+                // 데이터가 없을 때
+                // 24번은 CCTV 아이콘 유지, 나머지는 기본 핀(또는 숨김) 처리
+                if (mesh.unicast_address !== 24) {
+                    icon = undefined;
+                }
             }
+
             options.set(mesh.unicast_address, { icon, label });
         }
         return options;
-    }, [activeFilter, allData]); // 의존성 배열은 그대로
+    }, [activeFilter, allData]);
 
     return (
         <S.RootContainer>
-            {/* 상태와 세터(setter)를 props로 전달 */}
             <MeshDataSelector activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
 
             <S.MapWrapper>
@@ -117,7 +148,6 @@ const GoogleMapComponent: React.FC = () => {
                 <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
                     <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={18}>
                         {meshAdress.map((mesh) => {
-                            // 미리 계산된 옵션 가져오기
                             const options = markerOptions.get(mesh.unicast_address);
 
                             return (
@@ -125,14 +155,12 @@ const GoogleMapComponent: React.FC = () => {
                                     key={mesh.id}
                                     position={{ lat: mesh.lat, lng: mesh.lng }}
                                     onClick={() => setSelectedMesh(mesh)}
-                                    // '전체'가 선택되면 options가 undefined이므로 기본 마커가 표시됨
                                     icon={options?.icon}
                                     label={options?.label}
                                 />
                             );
                         })}
 
-                        {/* InfoWindow 로직은 기존과 동일 (selectedMeshData, selectedMeshError 사용) */}
                         {selectedMesh && (
                             <InfoWindow
                                 position={{ lat: selectedMesh.lat, lng: selectedMesh.lng }}
@@ -148,13 +176,13 @@ const GoogleMapComponent: React.FC = () => {
                                     <h3>📡 Name: {selectedMesh.name}</h3>
                                     {selectedMeshError ? (
                                         <p>❌ 데이터 로딩 실패</p>
-                                    ) : selectedMeshData ? ( // selectedMeshData 사용!
+                                    ) : selectedMeshData ? (
                                         <>
-                                            <p>🛰️UA: {selectedMeshData.unicast_address}</p>
+                                            <p>🛰️ UA: {selectedMeshData.unicast_address}</p>
                                             <p>🌡️ Temp: {selectedMeshData.Temp}°C</p>
                                             <p>💧 Humi: {selectedMeshData.Humidity}%</p>
                                             <p>💨 CO2: {selectedMeshData.CO2} ppm</p>
-                                            <p>🧪TVOC: {selectedMeshData.TVOC} ppb</p>
+                                            <p>🧪 TVOC: {selectedMeshData.TVOC} ppb</p>
                                             <p>📈 Pressure: {selectedMeshData.Pressure} hPa</p>
                                             <p>🔋 Battery: {selectedMeshData.Battery_Persent}%</p>
                                             <p>⚡ Voltage: {selectedMeshData.Voltage} V</p>

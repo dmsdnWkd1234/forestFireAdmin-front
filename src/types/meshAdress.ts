@@ -16,7 +16,7 @@ export const meshAdressArray = [
     { id: 12, name: '초안산 등산로12', unicast_address: 22, lat: 37.633683073360864, lng: 127.05396942884585 },
 
     { id: 13, name: '초안산 등산로13', unicast_address: 23, lat: 37.63323170550208, lng: 127.05584973642475 },
-    { id: 14, name: '초안산 등산로14', unicast_address: 24, lat: 37.634376361170595, lng: 127.05498956674745 },
+    { id: 14, name: '은봉관 실시간 감지', unicast_address: 24, lat: 37.631338247063624, lng: 127.05399322299232 },
     { id: 15, name: '초안산 등산로15', unicast_address: 25, lat: 37.6339, lng: 127.0545 },
 ];
 
